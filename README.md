@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Naseej Logo](assets/images/icon1.png)
+![Naseej Logo](assets/images/icon1_1.png)
 
 A premium mobile e-commerce platform for authentic Egyptian handmade carpets
 
