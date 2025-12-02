@@ -559,18 +559,6 @@ The app includes comprehensive dark mode support with:
 - Persistent theme preference
 - Properly contrasted UI elements
 
----
-
-## 🌍 Localization
-
-### Supported Languages
-
-- **English (en)** - Default
-- **Arabic (ar)** - RTL support
-- **French (fr)**
-- **German (de)**
-- **Spanish (es)**
-
 ### Adding New Languages
 
 1. Create translation files in `assets/lang/`
@@ -675,16 +663,6 @@ We welcome contributions! Please follow these guidelines:
 
 ---
 
-## 🐛 Known Issues
-
-- ⚠️ **iOS**: Image picker occasionally crashes on iOS 14
-- ⚠️ **Android**: Back button doesn't work properly in nested navigation
-- ⚠️ **Performance**: Large product lists may cause scroll lag on older devices
-
-See [Issues](https://github.com/yourusername/naseej-app/issues) for a complete list.
-
----
-
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -694,20 +672,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📧 Contact
 
 **Project Maintainer**: Your Name
-- Email: your.email@example.com
-- GitHub: [@yourusername](https://github.com/yourusername)
-
-**Project Link**: [https://github.com/yourusername/naseej-app](https://github.com/yourusername/naseej-app)
-
----
-
-## 🙏 Acknowledgments
-
-- Egyptian artisan community for their timeless craftsmanship
-- Flutter community for excellent documentation and support
-- All contributors who have helped shape this project
-
----
+- Email: yasserashraf3142@gmail.com
 
 <div align="center">
 Made with ❤️ for preserving Egyptian heritage through technology
