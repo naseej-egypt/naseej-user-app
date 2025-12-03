@@ -1,6 +1,6 @@
 class AppLink {
   // Base Server URL
-  static const String server = "https://appforyou.store/backendnaseej";
+  static const String server = "Your Host Domain Here";
   static const String imageBase = "$server/upload";
 
   // Image Directories
