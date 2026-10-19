@@ -6,6 +6,7 @@ import 'package:naseej/core/class/crud.dart';
 import 'package:naseej/core/constant/linkapi.dart';
 import 'package:naseej/main.dart';
 import 'package:naseej/models/payment_method_model.dart';
+import 'package:naseej/l10n/app_localizations.dart';
 
 class EditPaymentMethodPage extends StatefulWidget {
   final PaymentMethodModel paymentMethod;
@@ -207,7 +208,7 @@ class _EditPaymentMethodPageState extends State<EditPaymentMethodPage> {
     return Scaffold(
       backgroundColor: isDark ? Color(0xFF1A1614) : AppColor.backgroundcolor,
       appBar: AppBar(
-        title: Text('Edit Payment Method'),
+        title: Text(AppLocalizations.of(context)!.editPaymentMethod),
         backgroundColor: AppColor.primaryColor,
         foregroundColor: Colors.white,
       ),
@@ -250,7 +251,7 @@ class _EditPaymentMethodPageState extends State<EditPaymentMethodPage> {
             // Cardholder Name
             _buildTextField(
               controller: cardHolderNameController,
-              label: 'Cardholder Name',
+              label: AppLocalizations.of(context)!.cardholderName,
               hint: 'Enter name as shown on card',
               icon: Icons.person_outline,
               validator: (value) {
@@ -270,7 +271,7 @@ class _EditPaymentMethodPageState extends State<EditPaymentMethodPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Card Number',
+                  AppLocalizations.of(context)!.cardNumber,
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -330,7 +331,7 @@ class _EditPaymentMethodPageState extends State<EditPaymentMethodPage> {
                 Expanded(
                   child: _buildTextField(
                     controller: expiryMonthController,
-                    label: 'Expiry Month',
+                    label: AppLocalizations.of(context)!.expiryMonth,
                     hint: 'MM',
                     icon: Icons.calendar_today_outlined,
                     keyboardType: TextInputType.number,
@@ -357,7 +358,7 @@ class _EditPaymentMethodPageState extends State<EditPaymentMethodPage> {
                 Expanded(
                   child: _buildTextField(
                     controller: expiryYearController,
-                    label: 'Expiry Year',
+                    label: AppLocalizations.of(context)!.expiryYear,
                     hint: 'YYYY',
                     icon: Icons.calendar_today_outlined,
                     keyboardType: TextInputType.number,
@@ -390,7 +391,7 @@ class _EditPaymentMethodPageState extends State<EditPaymentMethodPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'CVV',
+                  AppLocalizations.of(context)!.cvv,
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -485,7 +486,7 @@ class _EditPaymentMethodPageState extends State<EditPaymentMethodPage> {
 
             // Update Button
             Button(
-              title: 'Update Payment Method',
+              title: AppLocalizations.of(context)!.savePaymentMethod,
               isLoading: isLoading,
               onpressed: _updatePaymentMethod,
               icon: Icons.save,

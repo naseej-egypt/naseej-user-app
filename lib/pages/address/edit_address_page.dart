@@ -6,6 +6,7 @@ import 'package:naseej/main.dart';
 import 'package:naseej/models/address_model.dart';
 import 'package:naseej/core/class/crud.dart';
 import 'package:naseej/core/constant/linkapi.dart';
+import 'package:naseej/l10n/app_localizations.dart';
 
 class EditAddressPage extends StatefulWidget {
   final AddressModel address;
@@ -159,7 +160,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
     return Scaffold(
       backgroundColor: isDark ? Color(0xFF1A1614) : AppColor.backgroundcolor,
       appBar: AppBar(
-        title: Text('Edit Address'),
+        title: Text(AppLocalizations.of(context)!.editAddress),
         backgroundColor: AppColor.primaryColor,
         foregroundColor: Colors.white,
       ),
@@ -192,7 +193,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
             // Street Address
             _buildTextField(
               controller: streetController,
-              label: 'Street Address *',
+              label: '${AppLocalizations.of(context)!.addressLine1} *',
               hint: 'House number and street name',
               icon: Icons.home_outlined,
               maxLines: 2,
@@ -208,7 +209,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
             // City
             _buildTextField(
               controller: cityController,
-              label: 'City *',
+              label: '${AppLocalizations.of(context)!.cityField} *',
               hint: 'Enter city',
               icon: Icons.location_city,
               validator: (value) {
@@ -227,7 +228,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
                   flex: 2,
                   child: _buildTextField(
                     controller: stateController,
-                    label: 'State/Province *',
+                    label: '${AppLocalizations.of(context)!.stateProvince} *',
                     hint: 'State',
                     icon: Icons.map_outlined,
                     validator: (value) {
@@ -242,7 +243,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
                 Expanded(
                   child: _buildTextField(
                     controller: zipCodeController,
-                    label: 'Zip Code *',
+                    label: '${AppLocalizations.of(context)!.postalCode} *',
                     hint: '12345',
                     icon: Icons.pin_outlined,
                     keyboardType: TextInputType.number,
@@ -265,7 +266,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
 
             // Update Button
             Button(
-              title: 'Update Address',
+              title: AppLocalizations.of(context)!.saveAddress,
               isLoading: isLoading,
               onpressed: _updateAddress,
               icon: Icons.save,
@@ -331,7 +332,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Country *',
+          '${AppLocalizations.of(context)!.country} *',
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w600,

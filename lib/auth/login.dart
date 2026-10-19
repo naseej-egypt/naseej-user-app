@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:naseej/core/constant/app_colors.dart';
 import 'package:naseej/core/constant/linkapi.dart';
 import 'package:naseej/main.dart';
@@ -12,6 +13,7 @@ import 'package:naseej/utils/favorites_manager.dart';
 import 'package:naseej/core/functions/checkinternet.dart';
 import 'package:naseej/core/middleware/internet_middleware.dart';
 import 'forget_password_email.dart';
+import 'package:naseej/l10n/app_localizations.dart';
 
 class login extends StatefulWidget {
   const login({super.key});
@@ -26,6 +28,7 @@ class _loginState extends State<login> {
 
   bool isLoading = false;
   Crud crud = Crud();
+  DateTime? _lastBackPress;
 
   @override
   void dispose() {
@@ -48,7 +51,7 @@ class _loginState extends State<login> {
         SnackBar(
           backgroundColor: AppColor.backgroundcolor2,
           content: Text(
-            "Please fill all fields",
+            AppLocalizations.of(context)!.pleaseFillAllFields,
             style: TextStyle(color: AppColor.warningColor),
           ),
         ),
@@ -61,7 +64,7 @@ class _loginState extends State<login> {
         SnackBar(
           backgroundColor: AppColor.backgroundcolor2,
           content: Text(
-            "Please enter a valid email",
+            AppLocalizations.of(context)!.pleaseEnterValidEmail,
             style: TextStyle(color: AppColor.warningColor),
           ),
         ),
@@ -96,7 +99,7 @@ class _loginState extends State<login> {
       sharedPref.setString("step", "2"); // Mark as logged in
 
       // Set user-specific preferences
-      LanguageManager.setCurrentUser(userId);
+      // Language is global — no per-user language setup needed
       ThemeManager.setCurrentUser(userId);
       FavoritesManager.setCurrentUser(userId);
 
@@ -107,19 +110,19 @@ class _loginState extends State<login> {
       // Navigate to main page
       Navigator.of(context).pushNamedAndRemoveUntil("/main", (route) => false);
     } else {
-      String errorMessage = response["message"] ?? "Login failed";
+      String errorMessage = response["message"] ?? AppLocalizations.of(context)!.loginFailed;
 
       // Check for specific error messages
       if (errorMessage.contains("verify your email")) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              "Please verify your email before logging in",
+              AppLocalizations.of(context)!.pleaseVerifyEmail,
               style: TextStyle(color: AppColor.warningColor),
             ),
             backgroundColor: AppColor.backgroundcolor2,
             action: SnackBarAction(
-              label: "Resend",
+              label: AppLocalizations.of(context)!.resend,
               textColor: AppColor.primaryColor,
               onPressed: () {
                 // Navigate to email verification
@@ -147,6 +150,32 @@ class _loginState extends State<login> {
 
   @override
   Widget build(BuildContext context) {
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        final now = DateTime.now();
+        if (_lastBackPress == null || now.difference(_lastBackPress!) > const Duration(seconds: 2)) {
+          _lastBackPress = now;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(AppLocalizations.of(context)!.login == 'Login'
+                  ? 'Press back again to exit'
+                  : 'اضغط مرة أخرى للخروج'),
+              duration: const Duration(seconds: 2),
+              behavior: SnackBarBehavior.floating,
+              backgroundColor: AppColor.primaryColor,
+            ),
+          );
+        } else {
+          SystemNavigator.pop();
+        }
+      },
+      child: _buildLoginContent(context),
+    );
+  }
+
+  Widget _buildLoginContent(BuildContext context) {
     return Scaffold(
       body: Container(
         padding: EdgeInsets.all(20),
@@ -156,35 +185,35 @@ class _loginState extends State<login> {
             Logo(),
             SizedBox(height: 30),
             Text(
-              "Welcome Back",
+              AppLocalizations.of(context)!.welcomeBack,
               style: Theme.of(context).textTheme.headlineLarge,
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 10),
             Text(
-              "Login to continue",
+              AppLocalizations.of(context)!.loginToContinue,
               style: Theme.of(context).textTheme.bodyMedium,
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 40),
             Text(
-              "Email",
+              AppLocalizations.of(context)!.email,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             SizedBox(height: 10),
             CustomTextForm(
-              hintText: "Enter your email",
+              hintText: AppLocalizations.of(context)!.enterYourEmail,
               controller: emailController,
               keyboardType: TextInputType.emailAddress,
             ),
             SizedBox(height: 20),
             Text(
-              "Password",
+              AppLocalizations.of(context)!.password,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             SizedBox(height: 10),
             CustomTextForm(
-              hintText: "Enter your password",
+              hintText: AppLocalizations.of(context)!.enterYourPassword,
               controller: passController,
               obscureText: true,
               isPassword: true,
@@ -203,7 +232,7 @@ class _loginState extends State<login> {
                     ? Alignment.topRight
                     : Alignment.topLeft,
                 child: Text(
-                  "Forgot Password?",
+                  AppLocalizations.of(context)!.forgotPassword,
                   style: TextStyle(
                     fontSize: 14,
                     color: AppColor.primaryColor,
@@ -213,7 +242,7 @@ class _loginState extends State<login> {
             ),
             SizedBox(height: 30),
             Button(
-              title: "Login",
+              title: AppLocalizations.of(context)!.login,
               isLoading: isLoading,
               onpressed: signIn,
             ),
@@ -222,15 +251,15 @@ class _loginState extends State<login> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Don't have an account? ",
+                  AppLocalizations.of(context)!.dontHaveAccount,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.of(context).pushReplacementNamed("/register");
+                    Navigator.of(context).pushNamed("/register");
                   },
                   child: Text(
-                    "Register",
+                    AppLocalizations.of(context)!.register,
                     style: TextStyle(
                       fontSize: 16,
                       color: AppColor.primaryColor,
@@ -245,4 +274,4 @@ class _loginState extends State<login> {
       ),
     );
   }
-}
+}

@@ -52,7 +52,7 @@ class _FreeShippingPageState extends State<FreeShippingPage> {
         foregroundColor: Colors.white,
         actions: [
           Container(
-            margin: EdgeInsets.only(right: 12),
+            margin: EdgeInsetsDirectional.only(end: 12),
             padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
               gradient: LinearGradient(

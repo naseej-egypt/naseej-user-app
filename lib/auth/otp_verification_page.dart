@@ -6,6 +6,7 @@ import 'package:naseej/component/button.dart';
 import 'package:naseej/component/crud.dart';
 import '../core/functions/checkinternet.dart';
 import '../core/middleware/internet_middleware.dart';
+import 'package:naseej/l10n/app_localizations.dart';
 
 class OTPVerificationPage extends StatefulWidget {
   final String email;
@@ -61,7 +62,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
         SnackBar(
           backgroundColor: AppColor.backgroundcolor2,
           content: Text(
-            "Please enter the complete 6-digit code",
+            AppLocalizations.of(context)!.pleaseEnterComplete6DigitCode,
             style: TextStyle(color: AppColor.warningColor),
           ),
         ),
@@ -85,7 +86,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
     if (response["status"] == "success") {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Email verified successfully!"),
+          content: Text(AppLocalizations.of(context)!.emailVerifiedSuccessfully),
           backgroundColor: AppColor.successColor,
         ),
       );
@@ -99,7 +100,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
         );
       });
     } else {
-      String errorMessage = response["message"] ?? "Verification failed";
+      String errorMessage = response["message"] ?? AppLocalizations.of(context)!.verificationFailed;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: AppColor.backgroundcolor2,
@@ -143,12 +144,12 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Verification code resent successfully!"),
+          content: Text(AppLocalizations.of(context)!.verificationCodeResentSuccessfully),
           backgroundColor: AppColor.successColor,
         ),
       );
     } else {
-      String errorMessage = response["message"] ?? "Failed to resend code";
+      String errorMessage = response["message"] ?? AppLocalizations.of(context)!.failedToResendCode;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: AppColor.backgroundcolor2,
@@ -196,7 +197,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
 
                 // Title
                 Text(
-                  "Enter Verification Code",
+                  AppLocalizations.of(context)!.enterVerificationCode,
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -208,7 +209,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
 
                 // Description
                 Text(
-                  "We've sent a 6-digit code to",
+                  AppLocalizations.of(context)!.weSentCodeTo,
                   style: TextStyle(
                     fontSize: 16,
                     color: AppColor.grey,
@@ -261,7 +262,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
 
                 // Verify Button
                 Button(
-                  title: "Verify",
+                  title: AppLocalizations.of(context)!.verify,
                   isLoading: _isLoading,
                   onpressed: _verifyOTP,
                 ),
@@ -274,7 +275,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                   child: Column(
                     children: [
                       Text(
-                        "Didn't receive the code?",
+                        AppLocalizations.of(context)!.didntReceiveCode,
                         style: TextStyle(
                           fontSize: 14,
                           color: AppColor.grey,
@@ -298,7 +299,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                             ),
                           )
                               : Text(
-                            "Resend Code",
+                            AppLocalizations.of(context)!.resendCode,
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
@@ -308,7 +309,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                         )
                       else
                         Text(
-                          "Resend code in $_resendCountdown seconds",
+                          AppLocalizations.of(context)!.resendCodeIn(_resendCountdown),
                           style: TextStyle(
                             fontSize: 14,
                             color: AppColor.grey,

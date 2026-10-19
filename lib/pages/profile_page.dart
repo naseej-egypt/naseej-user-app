@@ -1,9 +1,9 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:naseej/core/services/ProfileService.dart';
 import 'package:naseej/core/constant/app_colors.dart';
 import 'package:naseej/main.dart';
+import 'package:naseej/l10n/app_localizations.dart';
 
 class ProfilePage extends StatefulWidget {
   final Map<String, dynamic>? userProfile;
@@ -45,7 +45,7 @@ class _ProfilePageState extends State<ProfilePage> {
         });
       } else {
         setState(() => isLoading = false);
-        _showMessage("Failed to load profile", isError: true);
+        _showMessage(AppLocalizations.of(context)!.failedToLoadProfile, isError: true);
       }
     } catch (e) {
       setState(() => isLoading = false);
@@ -58,7 +58,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final phone = phoneController.text.trim();
 
     if (name.isEmpty) {
-      _showMessage("Name cannot be empty", isError: true);
+      _showMessage(AppLocalizations.of(context)!.nameCannotBeEmpty, isError: true);
       return;
     }
 
@@ -75,11 +75,11 @@ class _ProfilePageState extends State<ProfilePage> {
           currentProfile = updatedProfile;
           isLoading = false;
         });
-        _showMessage("Profile updated successfully");
+        _showMessage(AppLocalizations.of(context)!.profileUpdatedSuccessfully);
         Navigator.of(context).pop(true);
       } else {
         setState(() => isLoading = false);
-        _showMessage("Failed to update profile", isError: true);
+        _showMessage(AppLocalizations.of(context)!.failedToUpdateProfile, isError: true);
       }
     } catch (e) {
       setState(() => isLoading = false);
@@ -99,21 +99,22 @@ class _ProfilePageState extends State<ProfilePage> {
       if (pickedFile != null) {
         setState(() => isLoadingImage = true);
 
-        File imageFile = File(pickedFile.path);
-        final imageUrl = await _profileService.uploadProfileImage(imageFile);
+        final imageBytes = await pickedFile.readAsBytes();
+        final fileName = pickedFile.name;
+        final imageUrl = await _profileService.uploadProfileImage(imageBytes, fileName);
 
         setState(() => isLoadingImage = false);
 
         if (imageUrl != null) {
-          _showMessage("Profile image updated successfully");
+          _showMessage(AppLocalizations.of(context)!.profileImageUpdatedSuccessfully);
           _loadUserProfile();
         } else {
-          _showMessage("Failed to update profile image", isError: true);
+          _showMessage(AppLocalizations.of(context)!.failedToUpdateProfileImage, isError: true);
         }
       }
     } catch (e) {
       setState(() => isLoadingImage = false);
-      _showMessage("Error picking image", isError: true);
+      _showMessage(AppLocalizations.of(context)!.errorPickingImage, isError: true);
     }
   }
 
@@ -140,7 +141,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               SizedBox(height: 20),
               Text(
-                "Update Profile Image",
+                AppLocalizations.of(context)!.updateProfileImage,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -153,7 +154,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   _buildImageOption(
                     icon: Icons.camera_alt,
-                    label: "Camera",
+                    label: AppLocalizations.of(context)!.camera,
                     color: AppColor.primaryColor,
                     onTap: () {
                       Navigator.pop(context);
@@ -162,7 +163,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   _buildImageOption(
                     icon: Icons.photo_library,
-                    label: "Gallery",
+                    label: AppLocalizations.of(context)!.gallery,
                     color: AppColor.goldAccent,
                     onTap: () {
                       Navigator.pop(context);
@@ -231,7 +232,7 @@ class _ProfilePageState extends State<ProfilePage> {
       return Scaffold(
         backgroundColor: isDark ? Color(0xFF1A1614) : AppColor.backgroundcolor,
         appBar: AppBar(
-          title: Text("Profile"),
+          title: Text(AppLocalizations.of(context)!.profile),
           backgroundColor: AppColor.primaryColor,
           foregroundColor: Colors.white,
         ),
@@ -301,7 +302,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Column(
                       children: [
                         Text(
-                          currentProfile?['name'] ?? "Unknown",
+                          currentProfile?['name'] ?? AppLocalizations.of(context)!.unknown,
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
@@ -311,7 +312,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         SizedBox(height: 4),
                         Text(
-                          currentProfile?['email'] ?? sharedPref.getString("user_email") ?? "No Email",
+                          currentProfile?['email'] ?? sharedPref.getString("user_email") ?? AppLocalizations.of(context)!.noEmail,
                           style: TextStyle(
                             fontSize: 16,
                             color: AppColor.grey,
@@ -556,7 +557,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               SizedBox(width: 12),
               Text(
-                "Edit Your Profile",
+                AppLocalizations.of(context)!.editProfile,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -569,7 +570,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
           // Name field
           Text(
-            "Full Name",
+            AppLocalizations.of(context)!.fullName,
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
@@ -577,13 +578,13 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
           SizedBox(height: 8),
-          _buildTextField(nameController, "Enter full name", isDark),
+          _buildTextField(nameController, AppLocalizations.of(context)!.enterFullName, isDark),
 
           SizedBox(height: 16),
 
           // Phone field
           Text(
-            "Phone Number (Optional)",
+            AppLocalizations.of(context)!.phoneNumberOptional,
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
@@ -591,7 +592,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
           SizedBox(height: 8),
-          _buildTextField(phoneController, "Enter phone number", isDark,
+          _buildTextField(phoneController, AppLocalizations.of(context)!.enterPhoneNumber, isDark,
               keyboardType: TextInputType.phone),
 
           SizedBox(height: 20),
@@ -626,7 +627,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   Icon(Icons.check_circle_outline, size: 20),
                   SizedBox(width: 8),
                   Text(
-                    "Update Profile",
+                    AppLocalizations.of(context)!.updateProfile,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -713,7 +714,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               SizedBox(width: 12),
               Text(
-                "Account Information",
+                AppLocalizations.of(context)!.accountInformation,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -726,22 +727,22 @@ class _ProfilePageState extends State<ProfilePage> {
 
           _buildInfoItem(
             icon: Icons.email_outlined,
-            label: "Email",
-            value: currentProfile?['email'] ?? "No Email",
+            label: AppLocalizations.of(context)!.email,
+            value: currentProfile?['email'] ?? AppLocalizations.of(context)!.noEmail,
             iconColor: AppColor.primaryColor,
           ),
           SizedBox(height: 16),
           _buildInfoItem(
             icon: Icons.shopping_bag_outlined,
-            label: "Total Orders",
+            label: AppLocalizations.of(context)!.totalOrders,
             value: currentProfile?['total_orders']?.toString() ?? "0",
             iconColor: AppColor.goldAccent,
           ),
           SizedBox(height: 16),
           _buildInfoItem(
             icon: Icons.verified_user_outlined,
-            label: "Account Status",
-            value: "Active",
+            label: AppLocalizations.of(context)!.accountStatus,
+            value: AppLocalizations.of(context)!.active,
             valueColor: AppColor.successColor,
             iconColor: AppColor.successColor,
           ),

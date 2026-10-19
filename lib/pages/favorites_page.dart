@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:naseej/component/crud.dart';
 import 'package:naseej/core/constant/linkapi.dart';
 import 'package:naseej/core/constant/app_colors.dart';
@@ -7,6 +6,7 @@ import 'package:naseej/main.dart';
 import 'package:naseej/pages/product_details_page.dart';
 import 'package:naseej/utils/favorites_manager.dart';
 import 'package:naseej/component/product_card.dart';
+import 'package:naseej/l10n/app_localizations.dart';
 
 class FavoritesPage extends StatefulWidget {
   const FavoritesPage({Key? key}) : super(key: key);
@@ -45,7 +45,7 @@ class _FavoritesPageState extends State<FavoritesPage> with AutomaticKeepAliveCl
       String? userId = sharedPref.getString("user_id");
       if (userId == null) {
         setState(() {
-          error = "Please login to view favorites";
+          error = AppLocalizations.of(context)!.pleaseLoginToViewFavorites;
           isLoading = false;
         });
         return;
@@ -101,7 +101,7 @@ class _FavoritesPageState extends State<FavoritesPage> with AutomaticKeepAliveCl
         setState(() {
           favoriteProducts = [];
           isLoading = false;
-          error = "Error loading favorites: ${e.toString()}";
+          error = "${AppLocalizations.of(context)!.errorLoadingFavorites}: ${e.toString()}";
         });
       }
     }
@@ -117,8 +117,7 @@ class _FavoritesPageState extends State<FavoritesPage> with AutomaticKeepAliveCl
   }
 
   void _navigateToHome() {
-    // Use Get.offAllNamed to properly navigate to home and clear navigation stack
-    Get.offAllNamed("/main");
+    Navigator.of(context).pushNamedAndRemoveUntil('/main', (route) => false);
   }
 
   @override
@@ -129,7 +128,7 @@ class _FavoritesPageState extends State<FavoritesPage> with AutomaticKeepAliveCl
     return Scaffold(
       backgroundColor: isDark ? Color(0xFF1A1614) : AppColor.backgroundcolor,
       appBar: AppBar(
-        title: Text("Favorites"),
+        title: Text(AppLocalizations.of(context)!.favorites),
         backgroundColor: AppColor.primaryColor,
         foregroundColor: Colors.white,
         leading: IconButton(
@@ -140,7 +139,7 @@ class _FavoritesPageState extends State<FavoritesPage> with AutomaticKeepAliveCl
           if (favoriteProducts.isNotEmpty)
             Center(
               child: Container(
-                margin: EdgeInsets.only(right: 16),
+                margin: EdgeInsetsDirectional.only(end: 16),
                 padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                 decoration: BoxDecoration(
                   color: AppColor.goldAccent,
@@ -197,7 +196,7 @@ class _FavoritesPageState extends State<FavoritesPage> with AutomaticKeepAliveCl
               ElevatedButton.icon(
                 onPressed: _loadFavoriteProducts,
                 icon: Icon(Icons.refresh),
-                label: Text("Retry"),
+                label: Text(AppLocalizations.of(context)!.retry),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColor.primaryColor,
                   foregroundColor: Colors.white,
@@ -309,7 +308,7 @@ class _FavoritesPageState extends State<FavoritesPage> with AutomaticKeepAliveCl
               ),
               SizedBox(height: 32),
               Text(
-                "No Favorites Yet",
+                AppLocalizations.of(context)!.noFavoritesYet,
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -320,7 +319,7 @@ class _FavoritesPageState extends State<FavoritesPage> with AutomaticKeepAliveCl
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
-                  "Start marking your favorite products to see them here",
+                  AppLocalizations.of(context)!.startMarkingFavorites,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 16,
@@ -362,7 +361,7 @@ class _FavoritesPageState extends State<FavoritesPage> with AutomaticKeepAliveCl
                     SizedBox(width: 16),
                     Expanded(
                       child: Text(
-                        "Tap the heart icon on any product to add it to your favorites",
+                        AppLocalizations.of(context)!.tapHeartIcon,
                         style: TextStyle(
                           fontSize: 14,
                           color: AppColor.grey,
@@ -377,7 +376,7 @@ class _FavoritesPageState extends State<FavoritesPage> with AutomaticKeepAliveCl
               ElevatedButton.icon(
                 onPressed: _navigateToHome,
                 icon: Icon(Icons.arrow_back),
-                label: Text("Back to Home"),
+                label: Text(AppLocalizations.of(context)!.backToHome),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColor.primaryColor,
                   foregroundColor: Colors.white,

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 import 'package:naseej/core/constant/app_colors.dart';
 import 'package:naseej/core/constant/linkapi.dart';
+import 'package:naseej/pages/legal_page.dart';
 import '../component/button.dart';
 import '../component/crud.dart';
 import '../component/logo.dart';
@@ -8,6 +10,7 @@ import '../component/textformfield.dart';
 import '../core/functions/checkinternet.dart';
 import '../core/middleware/internet_middleware.dart';
 import 'email_verification_notification.dart';
+import 'package:naseej/l10n/app_localizations.dart';
 
 class register extends StatefulWidget {
   const register({super.key});
@@ -25,6 +28,7 @@ class _registerState extends State<register> {
 
   Crud _crud = Crud();
   bool isLoading = false;
+  bool _termsAccepted = false;
 
   @override
   void dispose() {
@@ -37,6 +41,20 @@ class _registerState extends State<register> {
   }
 
   signUp() async {
+    // Check terms acceptance first
+    if (!_termsAccepted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: AppColor.backgroundcolor2,
+          content: Text(
+            AppLocalizations.of(context)!.pleaseAcceptTerms,
+            style: TextStyle(color: AppColor.warningColor),
+          ),
+        ),
+      );
+      return;
+    }
+
     // CHECK INTERNET FIRST
     bool hasInternet = await checkInternet();
     if (!hasInternet) {
@@ -54,7 +72,7 @@ class _registerState extends State<register> {
         SnackBar(
           backgroundColor: AppColor.backgroundcolor2,
           content: Text(
-            "Please fill all fields",
+            AppLocalizations.of(context)!.pleaseFillAllFields,
             style: TextStyle(color: AppColor.warningColor),
           ),
         ),
@@ -67,7 +85,7 @@ class _registerState extends State<register> {
         SnackBar(
           backgroundColor: AppColor.backgroundcolor2,
           content: Text(
-            "Please enter a valid email",
+            AppLocalizations.of(context)!.pleaseEnterValidEmail,
             style: TextStyle(color: AppColor.warningColor),
           ),
         ),
@@ -80,7 +98,7 @@ class _registerState extends State<register> {
         SnackBar(
           backgroundColor: AppColor.backgroundcolor2,
           content: Text(
-            "Password must be at least 6 characters",
+            AppLocalizations.of(context)!.passwordMinLength,
             style: TextStyle(color: AppColor.warningColor),
           ),
         ),
@@ -93,7 +111,7 @@ class _registerState extends State<register> {
         SnackBar(
           backgroundColor: AppColor.backgroundcolor2,
           content: Text(
-            "Passwords do not match",
+            AppLocalizations.of(context)!.passwordsDoNotMatch,
             style: TextStyle(color: AppColor.warningColor),
           ),
         ),
@@ -120,7 +138,7 @@ class _registerState extends State<register> {
     if (response["status"] == "success") {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Registration successful! Please verify your email."),
+          content: Text(AppLocalizations.of(context)!.registrationSuccessful),
           backgroundColor: AppColor.successColor,
         ),
       );
@@ -134,7 +152,7 @@ class _registerState extends State<register> {
         ),
       );
     } else {
-      String errorMessage = response["message"] ?? "Registration failed";
+      String errorMessage = response["message"] ?? AppLocalizations.of(context)!.registrationFailed;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: AppColor.backgroundcolor2,
@@ -158,75 +176,137 @@ class _registerState extends State<register> {
             Logo(),
             SizedBox(height: 30),
             Text(
-              "Create Account",
+              AppLocalizations.of(context)!.createAccount,
               style: Theme.of(context).textTheme.headlineLarge,
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 10),
             Text(
-              "Enter your information to get started",
+              AppLocalizations.of(context)!.enterInfoToGetStarted,
               style: Theme.of(context).textTheme.bodyMedium,
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 40),
             Text(
-              "Full Name",
+              AppLocalizations.of(context)!.fullName,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             SizedBox(height: 10),
             CustomTextForm(
-              hintText: "Enter your full name",
+              hintText: AppLocalizations.of(context)!.enterFullName,
               controller: nameController,
             ),
             SizedBox(height: 20),
             Text(
-              "Email",
+              AppLocalizations.of(context)!.email,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             SizedBox(height: 10),
             CustomTextForm(
-              hintText: "Enter your email",
+              hintText: AppLocalizations.of(context)!.enterYourEmail,
               controller: emailController,
               keyboardType: TextInputType.emailAddress,
             ),
             SizedBox(height: 20),
             Text(
-              "Phone Number",
+              AppLocalizations.of(context)!.phoneNumber,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             SizedBox(height: 10),
             CustomTextForm(
-              hintText: "Enter your phone number",
+              hintText: AppLocalizations.of(context)!.enterYourPhoneNumber,
               controller: phoneController,
               keyboardType: TextInputType.phone,
             ),
             SizedBox(height: 20),
             Text(
-              "Password",
+              AppLocalizations.of(context)!.password,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             SizedBox(height: 10),
             CustomTextForm(
-              hintText: "Enter your password",
+              hintText: AppLocalizations.of(context)!.enterYourPassword,
               controller: passController,
               obscureText: true,
               isPassword: true,
             ),
             SizedBox(height: 20),
             Text(
-              "Confirm Password",
+              AppLocalizations.of(context)!.confirmPassword,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             SizedBox(height: 10),
             CustomTextForm(
-              hintText: "Confirm your password",
+              hintText: AppLocalizations.of(context)!.confirmYourPassword,
               controller: confirmController,
               obscureText: true,
               isPassword: true,
             ),
-            SizedBox(height: 30),
+            SizedBox(height: 20),
+
+            // Terms & Privacy checkbox
+            Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white.withOpacity(0.05)
+                    : AppColor.primaryColor.withOpacity(0.05),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: _termsAccepted
+                      ? AppColor.primaryColor.withOpacity(0.3)
+                      : AppColor.borderGray,
+                ),
+              ),
+              child: CheckboxListTile(
+                value: _termsAccepted,
+                onChanged: (value) {
+                  setState(() => _termsAccepted = value ?? false);
+                },
+                activeColor: AppColor.primaryColor,
+                controlAffinity: ListTileControlAffinity.leading,
+                contentPadding: EdgeInsets.symmetric(horizontal: 8),
+                title: RichText(
+                  text: TextSpan(
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white70
+                          : AppColor.grey2,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: '${AppLocalizations.of(context)!.iHaveReadAndAccept} ',
+                      ),
+                      TextSpan(
+                        text: AppLocalizations.of(context)!.termsOfService,
+                        style: TextStyle(
+                          color: AppColor.primaryColor,
+                          fontWeight: FontWeight.w600,
+                          decoration: TextDecoration.underline,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () => LegalPage.launchTermsOfServiceUrl(),
+                      ),
+                      TextSpan(text: ' & '),
+                      TextSpan(
+                        text: AppLocalizations.of(context)!.privacyPolicy,
+                        style: TextStyle(
+                          color: AppColor.primaryColor,
+                          fontWeight: FontWeight.w600,
+                          decoration: TextDecoration.underline,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () => LegalPage.launchPrivacyPolicyUrl(),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
+            SizedBox(height: 20),
             Button(
-              title: "Register",
+              title: AppLocalizations.of(context)!.register,
               isLoading: isLoading,
               onpressed: signUp,
             ),
@@ -235,16 +315,15 @@ class _registerState extends State<register> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Already have an account? ",
+                  AppLocalizations.of(context)!.alreadyHaveAccount,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                        '/login', (route) => false);
+                    Navigator.of(context).pop();
                   },
                   child: Text(
-                    "Login",
+                    AppLocalizations.of(context)!.login,
                     style: TextStyle(
                       fontSize: 16,
                       color: AppColor.primaryColor,

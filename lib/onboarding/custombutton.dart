@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:naseej/core/constant/app_colors.dart';
+import 'package:naseej/l10n/app_localizations.dart';
+
 class CustomButtonOnBoarding extends StatelessWidget {
   final VoidCallback onPressed;
 
@@ -18,7 +20,7 @@ class CustomButtonOnBoarding extends StatelessWidget {
         textColor: Colors.white,
         onPressed: onPressed,
         color: AppColor.primaryColor,
-        child: const Text("Continue"),
+        child: Text(AppLocalizations.of(context)!.continueButton),
       ),
     );
   }

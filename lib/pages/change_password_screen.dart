@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:naseej/core/constant/app_colors.dart';
 import 'package:naseej/component/custom_button.dart';
 import 'package:naseej/component/custom_text_field.dart';
@@ -7,17 +7,17 @@ import 'package:naseej/utils/validators.dart';
 import 'package:naseej/main.dart';
 
 import '../core/ChangePasswordController.dart';
+import 'package:naseej/l10n/app_localizations.dart';
 
-class ChangePasswordScreen extends StatefulWidget {
+class ChangePasswordScreen extends ConsumerStatefulWidget {
   const ChangePasswordScreen({super.key});
 
   @override
-  State<ChangePasswordScreen> createState() => _ChangePasswordScreenState();
+  ConsumerState<ChangePasswordScreen> createState() => _ChangePasswordScreenState();
 }
 
-class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
+class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
   final _formKey = GlobalKey<FormState>();
-  final ChangePasswordController _controller = Get.put(ChangePasswordController());
 
   final currentPasswordController = TextEditingController();
   final newPasswordController = TextEditingController();
@@ -29,7 +29,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   Future<void> _changePassword() async {
     if (_formKey.currentState!.validate()) {
-      final success = await _controller.changePassword(
+      final controller = ref.read(changePasswordProvider);
+      final success = await controller.changePassword(
         currentPassword: currentPasswordController.text,
         newPassword: newPasswordController.text,
         confirmPassword: confirmPasswordController.text,
@@ -38,7 +39,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       if (success) {
         _showSuccessDialog();
       } else {
-        _showErrorSnackbar(_controller.errorMessage.value);
+        _showErrorSnackbar(controller.errorMessage);
       }
     }
   }
@@ -53,17 +54,17 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             children: [
               Icon(Icons.check_circle, color: AppColor.successColor),
               SizedBox(width: 12),
-              Text("Success", style: TextStyle(color: AppColor.successColor)),
+              Text(AppLocalizations.of(context)!.success, style: TextStyle(color: AppColor.successColor)),
             ],
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Password changed successfully!"),
+              Text(AppLocalizations.of(context)!.passwordChangedSuccessfully),
               SizedBox(height: 8),
               Text(
-                "For security reasons, you will be logged out and need to login again with your new password.",
+                AppLocalizations.of(context)!.logoutAfterPasswordChange,
                 style: TextStyle(fontSize: 14, color: AppColor.grey),
               ),
             ],
@@ -74,7 +75,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 Navigator.of(context).pop();
                 _logoutAndNavigate();
               },
-              child: Text("OK", style: TextStyle(color: AppColor.primaryColor)),
+              child: Text(AppLocalizations.of(context)!.ok, style: TextStyle(color: AppColor.primaryColor)),
             ),
           ],
         );
@@ -110,7 +111,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Change Password'),
+        title: Text(AppLocalizations.of(context)!.changePassword),
         backgroundColor: AppColor.primaryColor,
         foregroundColor: Colors.white,
       ),
@@ -140,7 +141,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'For security reasons, you will be logged out\nafter changing your password.',
+                      AppLocalizations.of(context)!.securityLogoutNotice,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: AppColor.secondColor,
@@ -155,8 +156,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               // Current Password
               CustomTextField(
                 controller: currentPasswordController,
-                label: 'Current Password',
-                hint: 'Enter your current password',
+                label: AppLocalizations.of(context)!.currentPassword,
+                hint: AppLocalizations.of(context)!.enterCurrentPassword,
                 prefixIcon: Icon(Icons.lock, color: AppColor.primaryColor),
                 obscureText: !showCurrentPassword,
                 validator: (value) => Validators.validateRequired(value, 'Current password'),
@@ -177,8 +178,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               // New Password
               CustomTextField(
                 controller: newPasswordController,
-                label: 'New Password',
-                hint: 'Enter new password',
+                label: AppLocalizations.of(context)!.newPassword,
+                hint: AppLocalizations.of(context)!.enterNewPassword,
                 prefixIcon: Icon(Icons.lock_outline, color: AppColor.primaryColor),
                 obscureText: !showNewPassword,
                 validator: Validators.validatePassword,
@@ -199,16 +200,16 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               // Confirm Password
               CustomTextField(
                 controller: confirmPasswordController,
-                label: 'Confirm New Password',
-                hint: 'Confirm your new password',
+                label: AppLocalizations.of(context)!.confirmNewPassword,
+                hint: AppLocalizations.of(context)!.confirmYourNewPassword,
                 prefixIcon: Icon(Icons.lock_outline, color: AppColor.primaryColor),
                 obscureText: !showConfirmPassword,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please confirm your password';
+                    return AppLocalizations.of(context)!.pleaseConfirmPassword;
                   }
                   if (value != newPasswordController.text) {
-                    return 'Passwords do not match';
+                    return AppLocalizations.of(context)!.passwordsDoNotMatchValidator;
                   }
                   return null;
                 },
@@ -244,7 +245,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        'You will be automatically logged out after password change for security purposes.',
+                        AppLocalizations.of(context)!.autoLogoutNotice,
                         style: TextStyle(
                           color: AppColor.warningColor,
                           fontSize: 13,
@@ -268,28 +269,28 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Password Requirements:',
+                      AppLocalizations.of(context)!.passwordRequirements,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: AppColor.primaryColor,
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Text('• At least 6 characters long', style: TextStyle(fontSize: 14)),
-                    Text('• Include uppercase and lowercase letters', style: TextStyle(fontSize: 14)),
-                    Text('• Include numbers and special characters', style: TextStyle(fontSize: 14)),
+                    Text(AppLocalizations.of(context)!.passwordReq1, style: TextStyle(fontSize: 14)),
+                    Text(AppLocalizations.of(context)!.passwordReq2, style: TextStyle(fontSize: 14)),
+                    Text(AppLocalizations.of(context)!.passwordReq3, style: TextStyle(fontSize: 14)),
                   ],
                 ),
               ),
               const SizedBox(height: 32),
 
               // Update Button
-              Obx(() => CustomButton(
-                text: 'Update Password & Logout',
-                onPressed: _controller.isLoading.value ? null : _changePassword,
-                isLoading: _controller.isLoading.value,
+              CustomButton(
+                text: AppLocalizations.of(context)!.updatePasswordAndLogout,
+                onPressed: ref.watch(changePasswordProvider).isLoading ? null : _changePassword,
+                isLoading: ref.watch(changePasswordProvider).isLoading,
                 backgroundColor: AppColor.primaryColor,
-              )),
+              ),
             ],
           ),
         ),

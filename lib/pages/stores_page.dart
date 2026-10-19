@@ -7,6 +7,7 @@ import 'package:naseej/component/store_card.dart';
 import 'package:naseej/component/store_filter_sheet.dart';
 import 'package:naseej/component/internet_checker_widget.dart';
 import 'package:naseej/core/services/store_service.dart';
+import 'package:naseej/l10n/app_localizations.dart';
 
 class StoresPage extends StatefulWidget {
   const StoresPage({Key? key}) : super(key: key);
@@ -192,7 +193,7 @@ class _StoresPageState extends State<StoresPage> {
               iconTheme: IconThemeData(color: Colors.white),
               flexibleSpace: FlexibleSpaceBar(
                 title: Text(
-                  'Our Stores',
+                  AppLocalizations.of(context)!.ourStoresTitle,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -234,7 +235,7 @@ class _StoresPageState extends State<StoresPage> {
                       child: TextField(
                         controller: _searchController,
                         decoration: InputDecoration(
-                          hintText: 'Search stores by name, address, or city...',
+                          hintText: AppLocalizations.of(context)!.searchStores,
                           prefixIcon: Icon(Icons.search, color: AppColor.primaryColor),
                           suffixIcon: _searchQuery.isNotEmpty
                               ? IconButton(
@@ -268,7 +269,7 @@ class _StoresPageState extends State<StoresPage> {
                                   Icon(Icons.filter_list, size: 20, color: AppColor.primaryColor),
                                   SizedBox(width: 8),
                                   Text(
-                                    'Filters',
+                                    AppLocalizations.of(context)!.filters,
                                     style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       color: AppColor.primaryColor,
@@ -295,7 +296,7 @@ class _StoresPageState extends State<StoresPage> {
                       CircularProgressIndicator(color: AppColor.primaryColor),
                       SizedBox(height: 16),
                       Text(
-                        'Loading stores...',
+                        AppLocalizations.of(context)!.loadingStores,
                         style: TextStyle(
                           color: AppColor.primaryColor,
                           fontSize: 16,
@@ -314,7 +315,7 @@ class _StoresPageState extends State<StoresPage> {
                       Icon(Icons.error_outline, size: 64, color: AppColor.warningColor),
                       SizedBox(height: 16),
                       Text(
-                        'Failed to load stores',
+                        AppLocalizations.of(context)!.failedToLoadStores,
                         style: TextStyle(
                           color: AppColor.warningColor,
                           fontSize: 16,
@@ -338,7 +339,7 @@ class _StoresPageState extends State<StoresPage> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColor.primaryColor,
                         ),
-                        child: Text('Try Again'),
+                        child: Text(AppLocalizations.of(context)!.tryAgain),
                       ),
                     ],
                   ),
@@ -353,7 +354,7 @@ class _StoresPageState extends State<StoresPage> {
                         Icon(Icons.store_mall_directory, size: 64, color: AppColor.grey),
                         SizedBox(height: 16),
                         Text(
-                          'No stores found',
+                          AppLocalizations.of(context)!.noStoresFound,
                           style: TextStyle(
                             color: AppColor.grey,
                             fontSize: 16,

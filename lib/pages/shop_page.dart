@@ -7,6 +7,7 @@ import 'package:naseej/core/constant/imgaeasset.dart';
 import 'package:naseej/main.dart';
 import 'package:naseej/component/product_card.dart';
 import 'package:naseej/pages/product_details_page.dart';
+import 'package:naseej/l10n/app_localizations.dart';
 
 class ShopPage extends StatefulWidget {
   final String category;
@@ -54,7 +55,7 @@ class _ShopPageState extends State<ShopPage> {
     return Scaffold(
       backgroundColor: isDark ? Color(0xFF1A1614) : AppColor.backgroundcolor,
       appBar: AppBar(
-        title: Text(widget.category == 'All' ? 'Recommended for You' : '${widget.category} Carpets'),
+        title: Text(widget.category == 'All' ? AppLocalizations.of(context)!.recommendedForYou : '${widget.category} ${AppLocalizations.of(context)!.carpets}'),
         backgroundColor: AppColor.primaryColor,
         foregroundColor: Colors.white,
         elevation: 0,
@@ -80,7 +81,7 @@ class _ShopPageState extends State<ShopPage> {
                         ),
                         SizedBox(height: 20),
                         Text(
-                          'Loading products...',
+                          AppLocalizations.of(context)!.loadingProducts,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -100,7 +101,7 @@ class _ShopPageState extends State<ShopPage> {
                         Icon(Icons.error_outline, size: 64, color: AppColor.warningColor),
                         SizedBox(height: 16),
                         Text(
-                          "Error loading products",
+                          AppLocalizations.of(context)!.errorLoadingProducts,
                           style: TextStyle(color: AppColor.warningColor),
                         ),
                         SizedBox(height: 16),
@@ -110,7 +111,7 @@ class _ShopPageState extends State<ShopPage> {
                             backgroundColor: AppColor.primaryColor,
                             foregroundColor: Colors.white,
                           ),
-                          child: Text('Retry'),
+                          child: Text(AppLocalizations.of(context)!.retry),
                         ),
                       ],
                     ),
@@ -132,7 +133,7 @@ class _ShopPageState extends State<ShopPage> {
                         ),
                         SizedBox(height: 16),
                         Text(
-                          'No products found',
+                          AppLocalizations.of(context)!.noProductsFound,
                           style: TextStyle(
                             fontSize: 18,
                             color: AppColor.grey,
@@ -209,7 +210,7 @@ class _ShopPageState extends State<ShopPage> {
                       ),
                       SizedBox(height: 20),
                       Text(
-                        'Refreshing...',
+                        AppLocalizations.of(context)!.refreshing,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,

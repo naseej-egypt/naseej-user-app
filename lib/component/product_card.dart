@@ -2,8 +2,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:naseej/utils/favorites_manager.dart';
+import 'package:naseej/l10n/app_localizations.dart';
 import 'package:naseej/core/constant/app_colors.dart';
-import 'package:naseej/main.dart';
+import 'package:naseej/pages/main_container.dart';
 
 import '../core/services/cart_service.dart';
 
@@ -119,7 +120,7 @@ class _ProductCardState extends State<ProductCard> {
                   ),
                 ),
                 SizedBox(width: 12),
-                Text(newState ? 'Adding to favorites...' : 'Removing from favorites...'),
+                Text(newState ? AppLocalizations.of(context)!.addingToFavorites : AppLocalizations.of(context)!.removingFromFavorites),
               ],
             ),
             duration: Duration(seconds: 1),
@@ -144,7 +145,7 @@ class _ProductCardState extends State<ProductCard> {
                       size: 20,
                     ),
                     SizedBox(width: 12),
-                    Text(newState ? 'Added to favorites!' : 'Removed from favorites!'),
+                    Text(newState ? AppLocalizations.of(context)!.addedToFavorites : AppLocalizations.of(context)!.removedFromFavorites),
                   ],
                 ),
                 duration: Duration(seconds: 2),
@@ -172,7 +173,7 @@ class _ProductCardState extends State<ProductCard> {
             setState(() => isFavorite = !newState);
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('Failed to update favorites. Please try again.'),
+                content: Text(AppLocalizations.of(context)!.failedToUpdateFavorite),
                 backgroundColor: AppColor.warningColor,
                 duration: Duration(seconds: 2),
               ),
@@ -187,7 +188,7 @@ class _ProductCardState extends State<ProductCard> {
         setState(() => isFavorite = !isFavorite);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('An error occurred. Please try again.'),
+            content: Text(AppLocalizations.of(context)!.pleaseTryAgainLater),
             backgroundColor: AppColor.warningColor,
           ),
         );
@@ -199,26 +200,6 @@ class _ProductCardState extends State<ProductCard> {
 
   Future<void> _addToCart() async {
     if (_isAddingToCart || _disposed || widget.productId.isEmpty) return;
-
-    // Check if user is logged in
-    final token = sharedPref.getString("token");
-    if (token == null || token.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Please login to add items to cart'),
-          backgroundColor: AppColor.warningColor,
-          behavior: SnackBarBehavior.floating,
-          action: SnackBarAction(
-            label: 'Login',
-            textColor: Colors.white,
-            onPressed: () {
-              Navigator.of(context).pushNamed('/login');
-            },
-          ),
-        ),
-      );
-      return;
-    }
 
     setState(() {
       _isAddingToCart = true;
@@ -247,8 +228,14 @@ class _ProductCardState extends State<ProductCard> {
 
       if (result['success'] == true && mounted) {
         widget.onCartUpdated?.call();
-        // Show success message
-        ScaffoldMessenger.of(context).showSnackBar(
+
+        // Capture context-dependent objects BEFORE showing snackbar
+        // to prevent crash when user taps action after widget disposal
+        final scaffoldMessenger = ScaffoldMessenger.of(context);
+        final navigator = Navigator.of(context);
+        final l10n = AppLocalizations.of(context)!;
+
+        scaffoldMessenger.showSnackBar(
           SnackBar(
             content: Row(
               children: [
@@ -256,7 +243,7 @@ class _ProductCardState extends State<ProductCard> {
                 SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    result['message'] ?? 'Added to cart successfully!',
+                    l10n.addedToCart,
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
@@ -264,22 +251,22 @@ class _ProductCardState extends State<ProductCard> {
             ),
             backgroundColor: AppColor.successColor,
             behavior: SnackBarBehavior.floating,
-            duration: Duration(seconds: 2),
+            duration: Duration(seconds: 3),
             action: SnackBarAction(
-              label: 'View Cart',
+              label: l10n.viewCart,
               textColor: Colors.white,
               onPressed: () {
-                // Navigate to cart page
-                Navigator.of(context).pushNamed('/cart');
+                navigator.pushAndRemoveUntil(
+                  MaterialPageRoute(
+                    builder: (_) => MainContainer(initialIndex: 3),
+                  ),
+                  (route) => false,
+                );
               },
             ),
           ),
         );
-
-        // Optional: Trigger a callback if needed
-        // You can add a callback for cart updates if required
       } else if (mounted) {
-        // Show error message
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Row(
@@ -288,7 +275,7 @@ class _ProductCardState extends State<ProductCard> {
                 SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    result['message'] ?? 'Failed to add to cart',
+                    result['message'] ?? AppLocalizations.of(context)!.failedToAddToCart,
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
@@ -311,7 +298,7 @@ class _ProductCardState extends State<ProductCard> {
                 SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    'Network error. Please try again.',
+                    AppLocalizations.of(context)!.pleaseTryAgainLater,
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
@@ -480,7 +467,7 @@ class _ProductCardState extends State<ProductCard> {
                               ),
                             )
                                 : Text(
-                              'Add to Cart',
+                              AppLocalizations.of(context)!.addToCart,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 11,

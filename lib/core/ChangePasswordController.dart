@@ -1,11 +1,12 @@
-import 'package:get/get.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:naseej/core/services/ProfileService.dart';
 
-class ChangePasswordController extends GetxController {
+class ChangePasswordController extends ChangeNotifier {
   final ProfileService _profileService = ProfileService();
 
-  final RxBool isLoading = false.obs;
-  final RxString errorMessage = ''.obs;
+  bool isLoading = false;
+  String errorMessage = '';
 
   Future<bool> changePassword({
     required String currentPassword,
@@ -13,8 +14,9 @@ class ChangePasswordController extends GetxController {
     required String confirmPassword,
   }) async {
     try {
-      isLoading.value = true;
-      errorMessage.value = '';
+      isLoading = true;
+      errorMessage = '';
+      notifyListeners();
 
       final success = await _profileService.changePassword(
         currentPassword: currentPassword,
@@ -22,16 +24,24 @@ class ChangePasswordController extends GetxController {
         confirmPassword: confirmPassword,
       );
 
-      isLoading.value = false;
+      isLoading = false;
+      notifyListeners();
       return success;
     } catch (e) {
-      isLoading.value = false;
-      errorMessage.value = e.toString();
+      isLoading = false;
+      errorMessage = e.toString();
+      notifyListeners();
       return false;
     }
   }
 
   void clearError() {
-    errorMessage.value = '';
+    errorMessage = '';
+    notifyListeners();
   }
 }
+
+final changePasswordProvider =
+    ChangeNotifierProvider.autoDispose<ChangePasswordController>((ref) {
+  return ChangePasswordController();
+});

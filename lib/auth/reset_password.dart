@@ -6,6 +6,7 @@ import 'package:naseej/component/textformfield.dart';
 import 'package:naseej/component/crud.dart';
 import '../core/functions/checkinternet.dart';
 import '../core/middleware/internet_middleware.dart';
+import 'package:naseej/l10n/app_localizations.dart';
 
 class ResetPasswordPage extends StatefulWidget {
   final String email;
@@ -48,7 +49,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         SnackBar(
           backgroundColor: AppColor.backgroundcolor2,
           content: Text(
-            "Please fill all fields",
+            AppLocalizations.of(context)!.pleaseFillAllFields,
             style: TextStyle(color: AppColor.warningColor),
           ),
         ),
@@ -61,7 +62,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         SnackBar(
           backgroundColor: AppColor.backgroundcolor2,
           content: Text(
-            "Password must be at least 6 characters",
+            AppLocalizations.of(context)!.passwordMinLength,
             style: TextStyle(color: AppColor.warningColor),
           ),
         ),
@@ -74,7 +75,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         SnackBar(
           backgroundColor: AppColor.backgroundcolor2,
           content: Text(
-            "Passwords do not match",
+            AppLocalizations.of(context)!.passwordsDoNotMatch,
             style: TextStyle(color: AppColor.warningColor),
           ),
         ),
@@ -100,7 +101,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     if (response["status"] == "success") {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Password reset successfully!"),
+          content: Text(AppLocalizations.of(context)!.passwordResetSuccessfully),
           backgroundColor: AppColor.successColor,
         ),
       );
@@ -114,7 +115,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         );
       });
     } else {
-      String errorMessage = response["message"] ?? "Password reset failed";
+      String errorMessage = response["message"] ?? AppLocalizations.of(context)!.passwordResetFailed;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: AppColor.backgroundcolor2,
@@ -130,12 +131,12 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.backgroundcolor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        foregroundColor: AppColor.primaryColor,
+        foregroundColor: Theme.of(context).colorScheme.primary,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -159,24 +160,24 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                     height: 100,
                     margin: EdgeInsets.only(bottom: 20, top: 20),
                     decoration: BoxDecoration(
-                      color: AppColor.successColor.withOpacity(0.1),
+                      color: const Color(0xff6b8b3c).withOpacity(0.1),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
                       Icons.lock_open,
                       size: 50,
-                      color: AppColor.successColor,
+                      color: const Color(0xff6b8b3c),
                     ),
                   ),
 
                   SizedBox(height: 20),
 
                   Text(
-                    "Create New Password",
+                    AppLocalizations.of(context)!.createNewPassword,
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
-                      color: AppColor.primaryColor,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -184,10 +185,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                   SizedBox(height: 10),
 
                   Text(
-                    "Enter your new password below",
+                    AppLocalizations.of(context)!.enterNewPasswordBelow,
                     style: TextStyle(
                       fontSize: 16,
-                      color: AppColor.grey,
+                      color: Theme.of(context).textTheme.bodyMedium?.color ?? const Color(0xFF666666),
                       height: 1.5,
                     ),
                     textAlign: TextAlign.center,
@@ -196,18 +197,18 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                   SizedBox(height: 40),
 
                   Text(
-                    "New Password",
+                    AppLocalizations.of(context)!.newPassword,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: AppColor.primaryColor,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
 
                   SizedBox(height: 10),
 
                   CustomTextForm(
-                    hintText: "Enter new password",
+                    hintText: AppLocalizations.of(context)!.enterNewPassword,
                     controller: newPasswordController,
                     obscureText: true,
                     isPassword: true,
@@ -216,18 +217,18 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                   SizedBox(height: 20),
 
                   Text(
-                    "Confirm Password",
+                    AppLocalizations.of(context)!.confirmPassword,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: AppColor.primaryColor,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
 
                   SizedBox(height: 10),
 
                   CustomTextForm(
-                    hintText: "Confirm new password",
+                    hintText: AppLocalizations.of(context)!.confirmNewPassword,
                     controller: confirmPasswordController,
                     obscureText: true,
                     isPassword: true,
@@ -236,7 +237,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                   SizedBox(height: 30),
 
                   Button(
-                    title: "Reset Password",
+                    title: AppLocalizations.of(context)!.resetPassword,
                     isLoading: isLoading,
                     onpressed: resetPassword,
                   ),
@@ -255,10 +256,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                         );
                       },
                       child: Text(
-                        "Back to Login",
+                        AppLocalizations.of(context)!.backToLogin,
                         style: TextStyle(
                           fontSize: 16,
-                          color: AppColor.primaryColor,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                     ),

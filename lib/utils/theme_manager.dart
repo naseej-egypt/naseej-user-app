@@ -113,6 +113,8 @@ class AppThemes {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: const Color(0xFFE8DCC8),
+        hintStyle: const TextStyle(color: Color(0xFF999999), fontSize: 14),
+        labelStyle: const TextStyle(color: Color(0xFF1A1A1A)),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
         focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Color(0xFF8b3c3c), width: 2)),
       ),
@@ -182,6 +184,8 @@ class AppThemes {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: const Color(0xFF2C2520),
+        hintStyle: const TextStyle(color: Color(0xFF8A7E6E), fontSize: 14),
+        labelStyle: const TextStyle(color: Color(0xFFE8DCC8)),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
         focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Color(0xFFdf9696), width: 2)),
       ),

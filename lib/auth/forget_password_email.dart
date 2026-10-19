@@ -7,6 +7,7 @@ import 'package:naseej/component/crud.dart';
 import 'package:naseej/auth/forget_password_otp.dart';
 import '../core/functions/checkinternet.dart';
 import '../core/middleware/internet_middleware.dart';
+import 'package:naseej/l10n/app_localizations.dart';
 
 class ForgetPasswordEmailPage extends StatefulWidget {
   const ForgetPasswordEmailPage({super.key});
@@ -40,7 +41,7 @@ class _ForgetPasswordEmailPageState extends State<ForgetPasswordEmailPage> {
         SnackBar(
           backgroundColor: AppColor.backgroundcolor2,
           content: Text(
-            "Please enter your email",
+            AppLocalizations.of(context)!.pleaseEnterYourEmail,
             style: TextStyle(color: AppColor.warningColor),
           ),
         ),
@@ -53,7 +54,7 @@ class _ForgetPasswordEmailPageState extends State<ForgetPasswordEmailPage> {
         SnackBar(
           backgroundColor: AppColor.backgroundcolor2,
           content: Text(
-            'Please enter a valid email address',
+            AppLocalizations.of(context)!.pleaseEnterValidEmailAddress,
             style: TextStyle(color: AppColor.warningColor),
           ),
         ),
@@ -76,7 +77,7 @@ class _ForgetPasswordEmailPageState extends State<ForgetPasswordEmailPage> {
     if (response["status"] == "success") {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Reset code sent successfully!'),
+          content: Text(AppLocalizations.of(context)!.resetCodeSent),
           backgroundColor: AppColor.successColor,
         ),
       );
@@ -91,7 +92,7 @@ class _ForgetPasswordEmailPageState extends State<ForgetPasswordEmailPage> {
         ),
       );
     } else {
-      String errorMessage = response["message"] ?? "Failed to send reset code";
+      String errorMessage = response["message"] ?? AppLocalizations.of(context)!.failedToSendResetCode;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: AppColor.backgroundcolor2,
@@ -107,12 +108,12 @@ class _ForgetPasswordEmailPageState extends State<ForgetPasswordEmailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.backgroundcolor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        foregroundColor: AppColor.primaryColor,
+        foregroundColor: Theme.of(context).colorScheme.primary,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -136,24 +137,24 @@ class _ForgetPasswordEmailPageState extends State<ForgetPasswordEmailPage> {
                     height: 100,
                     margin: EdgeInsets.only(bottom: 20, top: 20),
                     decoration: BoxDecoration(
-                      color: AppColor.primaryColor.withOpacity(0.1),
+                      color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
                       Icons.lock_reset,
                       size: 50,
-                      color: AppColor.primaryColor,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
 
                   SizedBox(height: 20),
 
                   Text(
-                    "Forgot Password",
+                    AppLocalizations.of(context)!.forgotPasswordTitle,
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
-                      color: AppColor.primaryColor,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -161,10 +162,10 @@ class _ForgetPasswordEmailPageState extends State<ForgetPasswordEmailPage> {
                   SizedBox(height: 10),
 
                   Text(
-                    "Enter your email to receive a reset code",
+                    AppLocalizations.of(context)!.enterEmailForResetCode,
                     style: TextStyle(
                       fontSize: 16,
-                      color: AppColor.grey,
+                      color: Theme.of(context).textTheme.bodyMedium?.color ?? const Color(0xFF666666),
                       height: 1.5,
                     ),
                     textAlign: TextAlign.center,
@@ -173,18 +174,18 @@ class _ForgetPasswordEmailPageState extends State<ForgetPasswordEmailPage> {
                   SizedBox(height: 40),
 
                   Text(
-                    "Email",
+                    AppLocalizations.of(context)!.email,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: AppColor.primaryColor,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
 
                   SizedBox(height: 10),
 
                   CustomTextForm(
-                    hintText: "Enter your email",
+                    hintText: AppLocalizations.of(context)!.enterYourEmail,
                     controller: emailController,
                     keyboardType: TextInputType.emailAddress,
                   ),
@@ -192,7 +193,7 @@ class _ForgetPasswordEmailPageState extends State<ForgetPasswordEmailPage> {
                   SizedBox(height: 30),
 
                   Button(
-                    title: "Send Reset Code",
+                    title: AppLocalizations.of(context)!.sendResetCode,
                     isLoading: isLoading,
                     onpressed: sendResetOTP,
                   ),
@@ -207,10 +208,10 @@ class _ForgetPasswordEmailPageState extends State<ForgetPasswordEmailPage> {
                         Navigator.pop(context);
                       },
                       child: Text(
-                        "Back to Login",
+                        AppLocalizations.of(context)!.backToLogin,
                         style: TextStyle(
                           fontSize: 16,
-                          color: AppColor.primaryColor,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                     ),

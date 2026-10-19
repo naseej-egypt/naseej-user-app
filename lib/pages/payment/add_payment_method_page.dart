@@ -5,6 +5,7 @@ import 'package:naseej/component/button.dart';
 import 'package:naseej/core/class/crud.dart';
 import 'package:naseej/core/constant/linkapi.dart';
 import 'package:naseej/main.dart';
+import 'package:naseej/l10n/app_localizations.dart';
 
 class AddPaymentMethodPage extends StatefulWidget {
   const AddPaymentMethodPage({Key? key}) : super(key: key);
@@ -205,7 +206,7 @@ class _AddPaymentMethodPageState extends State<AddPaymentMethodPage> {
     return Scaffold(
       backgroundColor: isDark ? Color(0xFF1A1614) : AppColor.backgroundcolor,
       appBar: AppBar(
-        title: Text('Add Payment Method'),
+        title: Text(AppLocalizations.of(context)!.addPaymentMethod),
         backgroundColor: AppColor.primaryColor,
         foregroundColor: Colors.white,
       ),
@@ -248,7 +249,7 @@ class _AddPaymentMethodPageState extends State<AddPaymentMethodPage> {
             // Cardholder Name
             _buildTextField(
               controller: cardHolderNameController,
-              label: 'Cardholder Name',
+              label: AppLocalizations.of(context)!.cardholderName,
               hint: 'Enter name as shown on card',
               icon: Icons.person_outline,
               validator: (value) {
@@ -266,7 +267,7 @@ class _AddPaymentMethodPageState extends State<AddPaymentMethodPage> {
             // Card Number
             _buildTextField(
               controller: cardNumberController,
-              label: 'Card Number',
+              label: AppLocalizations.of(context)!.cardNumber,
               hint: '1234 5678 9012 3456',
               icon: Icons.credit_card,
               keyboardType: TextInputType.number,
@@ -310,7 +311,7 @@ class _AddPaymentMethodPageState extends State<AddPaymentMethodPage> {
                 Expanded(
                   child: _buildTextField(
                     controller: expiryMonthController,
-                    label: 'Expiry Month',
+                    label: AppLocalizations.of(context)!.expiryMonth,
                     hint: 'MM',
                     icon: Icons.calendar_today_outlined,
                     keyboardType: TextInputType.number,
@@ -337,7 +338,7 @@ class _AddPaymentMethodPageState extends State<AddPaymentMethodPage> {
                 Expanded(
                   child: _buildTextField(
                     controller: expiryYearController,
-                    label: 'Expiry Year',
+                    label: AppLocalizations.of(context)!.expiryYear,
                     hint: 'YYYY',
                     icon: Icons.calendar_today_outlined,
                     keyboardType: TextInputType.number,
@@ -365,7 +366,7 @@ class _AddPaymentMethodPageState extends State<AddPaymentMethodPage> {
                 Expanded(
                   child: _buildTextField(
                     controller: cvvController,
-                    label: 'CVV',
+                    label: AppLocalizations.of(context)!.cvv,
                     hint: selectedCardType == 'Amex' ? '1234' : '123',
                     icon: Icons.lock_outline,
                     keyboardType: TextInputType.number,
@@ -467,7 +468,7 @@ class _AddPaymentMethodPageState extends State<AddPaymentMethodPage> {
 
             // Save Button
             Button(
-              title: 'Save Payment Method',
+              title: AppLocalizations.of(context)!.savePaymentMethod,
               isLoading: isLoading,
               onpressed: _savePaymentMethod,
               icon: Icons.save,

@@ -5,11 +5,12 @@ import 'package:naseej/core/services/orders_service.dart';
 import 'package:naseej/core/services/address_service.dart';
 import 'package:naseej/core/services/payment_service.dart';
 import 'package:naseej/core/services/store_service.dart';
-import 'package:naseej/pages/address/addresspage.dart' hide AddressModel;
+import 'package:naseej/pages/address/add_address_page.dart';
 import 'package:naseej/pages/payment/add_payment_method_page.dart';
 import 'package:naseej/models/address_model.dart' as models;
 import 'package:naseej/models/payment_method_model.dart' as models;
 import 'package:naseej/models/store_model.dart';
+import 'package:naseej/l10n/app_localizations.dart';
 
 class CheckoutPage extends StatefulWidget {
   final List<CartItem> cartItems;
@@ -70,7 +71,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
       if (hasError && mounted) {
         setState(() {
-          _errorMessage = 'Failed to load some checkout data. Please try again.';
+          _errorMessage = AppLocalizations.of(context)!.failedToLoadCheckoutData;
           _isLoading = false;
         });
         return;
@@ -84,7 +85,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
     } catch (e) {
       if (mounted) {
         setState(() {
-          _errorMessage = 'Error loading checkout data: ${e.toString()}';
+          _errorMessage = '${AppLocalizations.of(context)!.errorLoadingCheckoutData}: ${e.toString()}';
           _isLoading = false;
         });
       }
@@ -166,18 +167,20 @@ class _CheckoutPageState extends State<CheckoutPage> {
   Future<void> _placeOrder() async {
     // Validation
     if (_selectedDeliveryMethod == DeliveryMethod.delivery && _selectedAddress == null) {
-      _showErrorSnackBar(''
-          'Please select a delivery address');
+      if (mounted) {
+        _showErrorSnackBar(
+            AppLocalizations.of(context)!.pleaseSelectDeliveryAddress);
+      }
       return;
     }
 
     if (_selectedDeliveryMethod == DeliveryMethod.pickup && _selectedStore == null) {
-      _showErrorSnackBar('Please select a store for pickup');
+      _showErrorSnackBar(AppLocalizations.of(context)!.pleaseSelectStoreForPickup);
       return;
     }
 
     if (_selectedPaymentType == PaymentType.online && _selectedPaymentMethod == null) {
-      _showErrorSnackBar('Please select a payment method');
+      _showErrorSnackBar(AppLocalizations.of(context)!.pleaseSelectPaymentMethod);
       return;
     }
 
@@ -198,7 +201,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
       if (result['success'] == true && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Order placed successfully!'),
+            content: Text(AppLocalizations.of(context)!.orderPlacedSuccessfully),
             backgroundColor: AppColor.successColor,
             behavior: SnackBarBehavior.floating,
           ),
@@ -207,11 +210,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
         // Navigate to orders page
         Navigator.of(context).pushNamedAndRemoveUntil('/orders', (route) => false);
       } else if (mounted) {
-        _showErrorSnackBar(result['message'] ?? 'Failed to place order');
+        _showErrorSnackBar(result['message'] ?? AppLocalizations.of(context)!.failedToPlaceOrder);
       }
     } catch (e) {
       if (mounted) {
-        _showErrorSnackBar('Error placing order: ${e.toString()}');
+        _showErrorSnackBar('${AppLocalizations.of(context)!.errorPlacingOrder}: ${e.toString()}');
       }
     } finally {
       if (mounted) {
@@ -241,7 +244,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         backgroundColor: isDark ? Color(0xFF2C2520) : AppColor.cardBackground,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text(
-          'Select Delivery Address',
+          AppLocalizations.of(context)!.selectDeliveryAddress,
           style: TextStyle(
             color: isDark ? AppColor.goldAccent : AppColor.primaryColor,
             fontWeight: FontWeight.bold,
@@ -307,7 +310,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                     border: Border.all(color: AppColor.successColor),
                                   ),
                                   child: Text(
-                                    'Default',
+                                    AppLocalizations.of(context)!.defaultLabel,
                                     style: TextStyle(
                                       color: AppColor.successColor,
                                       fontSize: 10,
@@ -349,49 +352,78 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 )
               else
                 Container(
-                  padding: EdgeInsets.all(20),
+                  padding: EdgeInsets.all(24),
                   child: Column(
                     children: [
-                      Icon(Icons.location_off, size: 48, color: AppColor.grey),
-                      SizedBox(height: 12),
+                      Container(
+                        padding: EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: AppColor.primaryColor.withOpacity(0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(Icons.add_location_alt, size: 48, color: AppColor.primaryColor),
+                      ),
+                      SizedBox(height: 16),
                       Text(
-                        'No addresses found',
+                        AppLocalizations.of(context)!.noAddressesYet,
                         style: TextStyle(
-                          color: AppColor.grey,
-                          fontWeight: FontWeight.w500,
+                          color: isDark ? AppColor.goldAccent : AppColor.primaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
                         ),
                       ),
                       SizedBox(height: 8),
                       Text(
-                        'Please add an address to continue',
+                        AppLocalizations.of(context)!.addDeliveryAddressToContinue,
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           color: AppColor.grey,
-                          fontSize: 12,
+                          fontSize: 13,
                         ),
-                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: 20),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            _navigateToAddAddress();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColor.primaryColor,
+                            foregroundColor: Colors.white,
+                            padding: EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          icon: Icon(Icons.add_location_alt, size: 20),
+                          label: Text(AppLocalizations.of(context)!.addNewAddress, style: TextStyle(fontWeight: FontWeight.w600)),
+                        ),
                       ),
                     ],
                   ),
                 ),
 
-              SizedBox(height: 16),
-
-              // Add New Address Button
-              OutlinedButton.icon(
-                onPressed: () {
-                  Navigator.pop(context);
-                  _navigateToAddAddress();
-                },
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: AppColor.primaryColor,
-                  side: BorderSide(color: AppColor.primaryColor),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+              if (_addresses.isNotEmpty) ...[
+                SizedBox(height: 16),
+                // Add New Address Button (when addresses exist)
+                OutlinedButton.icon(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    _navigateToAddAddress();
+                  },
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: AppColor.primaryColor,
+                    side: BorderSide(color: AppColor.primaryColor),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
+                  icon: Icon(Icons.add, size: 18),
+                  label: Text(AppLocalizations.of(context)!.addNewAddress),
                 ),
-                icon: Icon(Icons.add, size: 18),
-                label: Text('Add New Address'),
-              ),
+              ],
             ],
           ),
         ),
@@ -399,7 +431,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text(
-              'Cancel',
+              AppLocalizations.of(context)!.cancel,
               style: TextStyle(color: AppColor.grey),
             ),
           ),
@@ -417,7 +449,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         backgroundColor: isDark ? Color(0xFF2C2520) : AppColor.cardBackground,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text(
-          'Select Store for Pickup',
+          AppLocalizations.of(context)!.selectStoreForPickup,
           style: TextStyle(
             color: isDark ? AppColor.goldAccent : AppColor.primaryColor,
             fontWeight: FontWeight.bold,
@@ -510,7 +542,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 Icon(Icons.store_mall_directory, size: 48, color: AppColor.grey),
                 SizedBox(height: 12),
                 Text(
-                  'No stores available',
+                  AppLocalizations.of(context)!.noStoresAvailable,
                   style: TextStyle(
                     color: AppColor.grey,
                     fontWeight: FontWeight.w500,
@@ -518,7 +550,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  'Please try again later',
+                  AppLocalizations.of(context)!.pleaseTryAgainLater,
                   style: TextStyle(
                     color: AppColor.grey,
                     fontSize: 12,
@@ -533,7 +565,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text(
-              'Cancel',
+              AppLocalizations.of(context)!.cancel,
               style: TextStyle(color: AppColor.grey),
             ),
           ),
@@ -551,7 +583,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         backgroundColor: isDark ? Color(0xFF2C2520) : AppColor.cardBackground,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text(
-          'Select Payment Method',
+          AppLocalizations.of(context)!.selectPaymentMethod,
           style: TextStyle(
             color: isDark ? AppColor.goldAccent : AppColor.primaryColor,
             fontWeight: FontWeight.bold,
@@ -630,7 +662,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                         border: Border.all(color: AppColor.successColor),
                                       ),
                                       child: Text(
-                                        'Default',
+                                        AppLocalizations.of(context)!.defaultLabel,
                                         style: TextStyle(
                                           color: AppColor.successColor,
                                           fontSize: 10,
@@ -647,7 +679,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                               ),
                               SizedBox(height: 2),
                               Text(
-                                'Expires ${paymentMethod.expiryDate}',
+                                '${AppLocalizations.of(context)!.expires} ${paymentMethod.expiryDate}',
                                 style: TextStyle(fontSize: 11, color: AppColor.grey),
                               ),
                             ],
@@ -668,49 +700,78 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 )
               else
                 Container(
-                  padding: EdgeInsets.all(20),
+                  padding: EdgeInsets.all(24),
                   child: Column(
                     children: [
-                      Icon(Icons.credit_card_off, size: 48, color: AppColor.grey),
-                      SizedBox(height: 12),
+                      Container(
+                        padding: EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: AppColor.primaryColor.withOpacity(0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(Icons.add_card, size: 48, color: AppColor.primaryColor),
+                      ),
+                      SizedBox(height: 16),
                       Text(
-                        'No payment methods found',
+                        AppLocalizations.of(context)!.noPaymentMethodsYet,
                         style: TextStyle(
-                          color: AppColor.grey,
-                          fontWeight: FontWeight.w500,
+                          color: isDark ? AppColor.goldAccent : AppColor.primaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
                         ),
                       ),
                       SizedBox(height: 8),
                       Text(
-                        'Please add a payment method to continue',
+                        AppLocalizations.of(context)!.addPaymentCardToUseOnlinePayment,
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           color: AppColor.grey,
-                          fontSize: 12,
+                          fontSize: 13,
                         ),
-                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: 20),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            _navigateToAddPaymentMethod();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColor.primaryColor,
+                            foregroundColor: Colors.white,
+                            padding: EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          icon: Icon(Icons.add_card, size: 20),
+                          label: Text(AppLocalizations.of(context)!.addNewCard, style: TextStyle(fontWeight: FontWeight.w600)),
+                        ),
                       ),
                     ],
                   ),
                 ),
 
-              SizedBox(height: 16),
-
-              // Add New Payment Method Button
-              OutlinedButton.icon(
-                onPressed: () {
-                  Navigator.pop(context);
-                  _navigateToAddPaymentMethod();
-                },
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: AppColor.primaryColor,
-                  side: BorderSide(color: AppColor.primaryColor),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+              if (_paymentMethods.isNotEmpty) ...[
+                SizedBox(height: 16),
+                // Add New Payment Method Button (when methods exist)
+                OutlinedButton.icon(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    _navigateToAddPaymentMethod();
+                  },
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: AppColor.primaryColor,
+                    side: BorderSide(color: AppColor.primaryColor),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
+                  icon: Icon(Icons.add_card, size: 18),
+                  label: Text(AppLocalizations.of(context)!.addNewCard),
                 ),
-                icon: Icon(Icons.add_card, size: 18),
-                label: Text('Add New Card'),
-              ),
+              ],
             ],
           ),
         ),
@@ -718,7 +779,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text(
-              'Cancel',
+              AppLocalizations.of(context)!.cancel,
               style: TextStyle(color: AppColor.grey),
             ),
           ),
@@ -730,11 +791,17 @@ class _CheckoutPageState extends State<CheckoutPage> {
   Future<void> _navigateToAddAddress() async {
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => AddressPage()),
+      MaterialPageRoute(builder: (context) => AddAddressPage()),
     );
     if (result == true) {
-      // Reload addresses
+      // Reload addresses — newly added address will be auto-selected
       await _loadAddresses();
+      // If this was the first address, auto-select it
+      if (_addresses.isNotEmpty && _selectedAddress == null) {
+        setState(() {
+          _selectedAddress = _addresses.first;
+        });
+      }
     }
   }
 
@@ -744,8 +811,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
       MaterialPageRoute(builder: (context) => AddPaymentMethodPage()),
     );
     if (result == true) {
-      // Reload payment methods
+      // Reload payment methods — newly added method will be auto-selected
       await _loadPaymentMethods();
+      // If this was the first payment method, auto-select it
+      if (_paymentMethods.isNotEmpty && _selectedPaymentMethod == null) {
+        setState(() {
+          _selectedPaymentMethod = _paymentMethods.first;
+        });
+      }
     }
   }
 
@@ -794,7 +867,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
     if (today < openingHours.length) {
       return openingHours[today];
     }
-    return 'Hours not available';
+    return AppLocalizations.of(context)!.hoursNotAvailable;
   }
 
   @override
@@ -805,7 +878,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
       return Scaffold(
         backgroundColor: isDark ? Color(0xFF1A1614) : AppColor.backgroundcolor,
         appBar: AppBar(
-          title: Text('Checkout'),
+          title: Text(AppLocalizations.of(context)!.checkout),
           backgroundColor: AppColor.primaryColor,
           foregroundColor: Colors.white,
         ),
@@ -816,7 +889,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
               CircularProgressIndicator(color: AppColor.primaryColor),
               SizedBox(height: 16),
               Text(
-                'Loading checkout data...',
+                AppLocalizations.of(context)!.loadingCheckoutData,
                 style: TextStyle(
                   color: AppColor.primaryColor,
                   fontSize: 16,
@@ -832,7 +905,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
       return Scaffold(
         backgroundColor: isDark ? Color(0xFF1A1614) : AppColor.backgroundcolor,
         appBar: AppBar(
-          title: Text('Checkout'),
+          title: Text(AppLocalizations.of(context)!.checkout),
           backgroundColor: AppColor.primaryColor,
           foregroundColor: Colors.white,
         ),
@@ -843,7 +916,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
               Icon(Icons.error_outline, size: 64, color: AppColor.warningColor),
               SizedBox(height: 16),
               Text(
-                'Failed to load checkout data',
+                AppLocalizations.of(context)!.failedToLoadCheckoutData,
                 style: TextStyle(
                   color: AppColor.warningColor,
                   fontSize: 16,
@@ -867,7 +940,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColor.primaryColor,
                 ),
-                child: Text('Try Again'),
+                child: Text(AppLocalizations.of(context)!.tryAgain),
               ),
             ],
           ),
@@ -878,7 +951,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
     return Scaffold(
       backgroundColor: isDark ? Color(0xFF1A1614) : AppColor.backgroundcolor,
       appBar: AppBar(
-        title: Text('Checkout'),
+        title: Text(AppLocalizations.of(context)!.checkout),
         backgroundColor: AppColor.primaryColor,
         foregroundColor: Colors.white,
       ),
@@ -893,14 +966,15 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   // Show address section only for delivery
                   if (_selectedDeliveryMethod == DeliveryMethod.delivery) ...[
                     _buildSectionHeader(
-                      title: 'Delivery Address',
+                      title: AppLocalizations.of(context)!.shippingAddress,
                       onEdit: _showAddressSelectionDialog,
                     ),
                     _buildAddressSelectionSection(isDark),
                     SizedBox(height: 24),
                   ],
 
-                  _buildSectionHeader(title: 'Delivery Method'),
+                  _buildSectionHeader(title: AppLocalizations.of(context)!.deliveryMethod),
+                  const SizedBox(height: 12),
                   _buildDeliveryMethodSection(isDark),
 
                   // Show store selection only for pickup
@@ -910,7 +984,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   ],
 
                   SizedBox(height: 24),
-                  _buildSectionHeader(title: 'Payment Method'),
+                  _buildSectionHeader(title: AppLocalizations.of(context)!.paymentMethod),
                   _buildPaymentMethodSection(isDark),
 
                   // Show payment method selection only for online payment
@@ -920,7 +994,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   ],
 
                   SizedBox(height: 24),
-                  _buildSectionHeader(title: 'Order Items (${widget.cartItems.length})'),
+                  _buildSectionHeader(title: '${AppLocalizations.of(context)!.orderSummary} (${widget.cartItems.length})'),
                   _buildOrderItemsSection(isDark),
                   SizedBox(height: 24),
                 ],
@@ -958,11 +1032,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _buildSummaryRow('Subtotal', widget.cartSummary.subtotal),
-              _buildSummaryRow('Shipping', widget.cartSummary.shipping),
-              _buildSummaryRow('Tax (8%)', widget.cartSummary.tax),
+              _buildSummaryRow(AppLocalizations.of(context)!.subtotal, widget.cartSummary.subtotal),
+              _buildSummaryRow(AppLocalizations.of(context)!.shipping, widget.cartSummary.shipping),
+              _buildSummaryRow(AppLocalizations.of(context)!.tax, widget.cartSummary.tax),
               Divider(height: 20, thickness: 2),
-              _buildSummaryRow('Total', widget.cartSummary.total, isTotal: true),
+              _buildSummaryRow(AppLocalizations.of(context)!.total, widget.cartSummary.total, isTotal: true),
               SizedBox(height: 16),
               SizedBox(
                 width: double.infinity,
@@ -992,7 +1066,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       SizedBox(width: 8),
                       Flexible(
                         child: Text(
-                          'Complete Order - \$${widget.cartSummary.total.toStringAsFixed(2)}',
+                          '${AppLocalizations.of(context)!.placeOrder} - \$${widget.cartSummary.total.toStringAsFixed(2)}',
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
@@ -1082,7 +1156,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         ],
                       ),
                     ),
-                    Icon(Icons.chevron_right, color: AppColor.grey),
+                    Icon(
+                      Directionality.of(context) == TextDirection.rtl
+                          ? Icons.chevron_left
+                          : Icons.chevron_right,
+                      color: AppColor.grey),
                   ],
                 ),
                 SizedBox(height: 12),
@@ -1107,7 +1185,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
               ),
               child: Center(
                 child: Text(
-                  'Please select a delivery address',
+                  '${AppLocalizations.of(context)!.pleaseAddAddress}',
                   style: TextStyle(
                     color: AppColor.warningColor,
                     fontWeight: FontWeight.w500,
@@ -1149,7 +1227,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   minimumSize: Size(50, 30),
                 ),
                 child: Text(
-                  'Change Store',
+                  AppLocalizations.of(context)!.changeStore,
                   style: TextStyle(
                     color: AppColor.primaryColor,
                     fontWeight: FontWeight.w600,
@@ -1220,7 +1298,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       ],
                     ),
                   ),
-                  Icon(Icons.chevron_right, color: AppColor.grey),
+                  Icon(
+                    Directionality.of(context) == TextDirection.rtl
+                        ? Icons.chevron_left
+                        : Icons.chevron_right,
+                    color: AppColor.grey),
                 ],
               ),
             )
@@ -1276,7 +1358,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   minimumSize: Size(50, 30),
                 ),
                 child: Text(
-                  'Change Card',
+                  AppLocalizations.of(context)!.changeCard,
                   style: TextStyle(
                     color: AppColor.primaryColor,
                     fontWeight: FontWeight.w600,
@@ -1371,7 +1453,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       ],
                     ),
                   ),
-                  Icon(Icons.chevron_right, color: AppColor.grey),
+                  Icon(
+                    Directionality.of(context) == TextDirection.rtl
+                        ? Icons.chevron_left
+                        : Icons.chevron_right,
+                    color: AppColor.grey),
                 ],
               ),
             )
@@ -1420,7 +1506,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 minimumSize: Size(50, 30),
               ),
               child: Text(
-                'Change',
+                AppLocalizations.of(context)!.changeAction,
                 style: TextStyle(
                   color: AppColor.primaryColor,
                   fontWeight: FontWeight.w600,
@@ -1557,7 +1643,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
           _buildPaymentTypeOption(
             isDark: isDark,
             type: PaymentType.cashOnDelivery,
-            title: 'Cash on Delivery',
+            title: AppLocalizations.of(context)!.cashOnDelivery,
             subtitle: 'Pay when you receive your order',
             isSelected: _selectedPaymentType == PaymentType.cashOnDelivery,
           ),
@@ -1567,7 +1653,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
           _buildPaymentTypeOption(
             isDark: isDark,
             type: PaymentType.online,
-            title: 'Online Payment',
+            title: AppLocalizations.of(context)!.creditCard,
             subtitle: 'Pay securely with your card',
             isSelected: _selectedPaymentType == PaymentType.online,
           ),

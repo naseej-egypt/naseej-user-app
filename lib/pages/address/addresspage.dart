@@ -5,6 +5,7 @@ import 'package:naseej/pages/address/add_address_page.dart';
 import 'package:naseej/core/constant/linkapi.dart';
 import 'package:naseej/main.dart';
 import 'package:naseej/models/address_model.dart';
+import 'package:naseej/l10n/app_localizations.dart';
 import 'edit_address_page.dart';
 
 class AddressPage extends StatefulWidget {
@@ -165,7 +166,7 @@ class _AddressPageState extends State<AddressPage> {
     return Scaffold(
       backgroundColor: isDark ? Color(0xFF1A1614) : AppColor.backgroundcolor,
       appBar: AppBar(
-        title: Text('My Addresses'),
+        title: Text(AppLocalizations.of(context)!.myAddresses),
         backgroundColor: AppColor.primaryColor,
         foregroundColor: Colors.white,
       ),
@@ -187,7 +188,7 @@ class _AddressPageState extends State<AddressPage> {
         },
         backgroundColor: AppColor.primaryColor,
         icon: Icon(Icons.add_location_alt),
-        label: Text('Add Address'),
+        label: Text(AppLocalizations.of(context)!.addAddress),
       ),
     );
   }
@@ -213,7 +214,7 @@ class _AddressPageState extends State<AddressPage> {
             ),
             SizedBox(height: 24),
             Text(
-              'No Addresses Yet',
+              AppLocalizations.of(context)!.noAddressesYet,
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -222,7 +223,7 @@ class _AddressPageState extends State<AddressPage> {
             ),
             SizedBox(height: 12),
             Text(
-              'Add your delivery addresses to\nmake checkout faster',
+              AppLocalizations.of(context)!.addYourDeliveryAddressesToMakeCheckoutFaster,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16,
@@ -311,7 +312,7 @@ class _AddressPageState extends State<AddressPage> {
                       border: Border.all(color: AppColor.successColor),
                     ),
                     child: Text(
-                      'Default',
+                      AppLocalizations.of(context)!.defaultAddress,
                       style: TextStyle(
                         color: AppColor.successColor,
                         fontSize: 11,
@@ -362,7 +363,7 @@ class _AddressPageState extends State<AddressPage> {
                           children: [
                             Icon(Icons.check_circle, size: 18, color: AppColor.successColor),
                             SizedBox(width: 12),
-                            Text('Set as Default'),
+                            Text(AppLocalizations.of(context)!.setAsDefault),
                           ],
                         ),
                       ),
@@ -372,7 +373,7 @@ class _AddressPageState extends State<AddressPage> {
                         children: [
                           Icon(Icons.delete, size: 18, color: AppColor.warningColor),
                           SizedBox(width: 12),
-                          Text('Delete'),
+                          Text(AppLocalizations.of(context)!.deleteAddress),
                         ],
                       ),
                     ),

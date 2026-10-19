@@ -1,19 +1,17 @@
-import 'package:get/get.dart';
-
-validInput(String val, int min, int max, String type) {
+String? validInput(String val, int min, int max, String type) {
   if (type == "username") {
-    if (!GetUtils.isUsername(val)) {
+    if (!RegExp(r'^[a-zA-Z0-9._]+$').hasMatch(val)) {
       return "not valid username";
     }
   }
   if (type == "email") {
-    if (!GetUtils.isEmail(val)) {
+    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(val)) {
       return "not valid email";
     }
   }
 
   if (type == "phone") {
-    if (!GetUtils.isPhoneNumber(val)) {
+    if (!RegExp(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$').hasMatch(val)) {
       return "not valid phone";
     }
   }
@@ -29,4 +27,6 @@ validInput(String val, int min, int max, String type) {
   if (val.length > max) {
     return "can't be larger than $max";
   }
+
+  return null;
 }

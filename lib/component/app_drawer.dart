@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:naseej/core/services/ProfileService.dart';
@@ -9,10 +8,10 @@ import 'package:naseej/pages/favorites_page.dart';
 import 'package:naseej/pages/about_page.dart';
 import 'package:naseej/pages/profile_page.dart';
 import 'package:naseej/pages/stores_page.dart';
-import 'package:naseej/utils/language_manager.dart';
 import 'package:naseej/utils/theme_manager.dart';
 import '../pages/address/addresspage.dart';
 import '../utils/favorites_manager.dart';
+import 'package:naseej/l10n/app_localizations.dart';
 
 class AppDrawer extends StatefulWidget {
   final VoidCallback? onFavoritesChanged;
@@ -68,15 +67,16 @@ class _AppDrawerState extends State<AppDrawer> {
       if (pickedFile != null) {
         _showUploadingOverlay();
 
-        File imageFile = File(pickedFile.path);
-        final imageUrl = await _profileService.uploadProfileImage(imageFile);
+        final imageBytes = await pickedFile.readAsBytes();
+        final fileName = pickedFile.name;
+        final imageUrl = await _profileService.uploadProfileImage(imageBytes, fileName);
 
         Navigator.of(context).pop(); // Remove overlay
 
         if (imageUrl != null) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text("Profile image updated successfully"),
+              content: Text(AppLocalizations.of(context)!.profileImageUpdatedSuccessfully),
               backgroundColor: AppColor.successColor,
               duration: Duration(seconds: 2),
               behavior: SnackBarBehavior.floating,
@@ -86,7 +86,7 @@ class _AppDrawerState extends State<AppDrawer> {
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text("Failed to upload image"),
+              content: Text(AppLocalizations.of(context)!.failedToUpdateProfileImage),
               backgroundColor: AppColor.warningColor,
               duration: Duration(seconds: 3),
               behavior: SnackBarBehavior.floating,
@@ -98,7 +98,7 @@ class _AppDrawerState extends State<AppDrawer> {
       Navigator.of(context).pop(); // Remove overlay if it exists
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Error selecting image"),
+          content: Text('${AppLocalizations.of(context)!.errorPickingImage}: $e'),
           backgroundColor: AppColor.warningColor,
           duration: Duration(seconds: 3),
           behavior: SnackBarBehavior.floating,
@@ -129,13 +129,10 @@ class _AppDrawerState extends State<AppDrawer> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              CircularProgressIndicator(
-                color: AppColor.primaryColor,
-                strokeWidth: 3,
-              ),
-              SizedBox(height: 20),
+              CircularProgressIndicator(color: AppColor.primaryColor),
+              SizedBox(height: 16),
               Text(
-                "Uploading Image",
+                AppLocalizations.of(context)!.pleaseWait,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -172,7 +169,7 @@ class _AppDrawerState extends State<AppDrawer> {
               ),
               SizedBox(height: 20),
               Text(
-                "Update Profile Image",
+                AppLocalizations.of(context)!.updateProfileImage,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -185,7 +182,7 @@ class _AppDrawerState extends State<AppDrawer> {
                 children: [
                   _buildImageOption(
                     icon: Icons.camera_alt,
-                    label: "Camera",
+                    label: AppLocalizations.of(context)!.camera,
                     color: AppColor.primaryColor,
                     onTap: () {
                       Navigator.pop(context);
@@ -194,7 +191,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   ),
                   _buildImageOption(
                     icon: Icons.photo_library,
-                    label: "Gallery",
+                    label: AppLocalizations.of(context)!.gallery,
                     color: AppColor.goldAccent,
                     onTap: () {
                       Navigator.pop(context);
@@ -300,7 +297,7 @@ class _AppDrawerState extends State<AppDrawer> {
                     Text(
                       isLoading
                           ? "Loading..."
-                          : userProfile?['name'] ?? "No Name",
+                          : userProfile?['name'] ?? AppLocalizations.of(context)!.noName,
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -331,7 +328,7 @@ class _AppDrawerState extends State<AppDrawer> {
                 children: [
                   _buildMenuItem(
                     icon: Icons.person_outline,
-                    title: "Profile",
+                    title: AppLocalizations.of(context)!.profile,
                     iconColor: AppColor.primaryColor,
                     onTap: () {
                       Navigator.pop(context);
@@ -354,7 +351,7 @@ class _AppDrawerState extends State<AppDrawer> {
 
                   _buildMenuItem(
                     icon: Icons.favorite_outline,
-                    title: "Favorites",
+                    title: AppLocalizations.of(context)!.favorites,
                     iconColor: Colors.pink,
                     onTap: () async {
                       Navigator.pop(context);
@@ -371,7 +368,7 @@ class _AppDrawerState extends State<AppDrawer> {
 
                   _buildMenuItem(
                     icon: Icons.settings_outlined,
-                    title: "Settings",
+                    title: AppLocalizations.of(context)!.settings,
                     iconColor: AppColor.goldAccent,
                     onTap: () {
                       Navigator.pop(context);
@@ -383,7 +380,7 @@ class _AppDrawerState extends State<AppDrawer> {
 
                   _buildMenuItem(
                     icon: Icons.home_outlined,
-                    title: "Address",
+                    title: AppLocalizations.of(context)!.address,
                     iconColor: AppColor.goldAccent,
                     onTap: () async {
                       Navigator.pop(context);
@@ -400,7 +397,7 @@ class _AppDrawerState extends State<AppDrawer> {
 
                   _buildMenuItem(
                     icon: Icons.store_outlined,
-                    title: "Our Stores",
+                    title: AppLocalizations.of(context)!.ourStores,
                     iconColor: AppColor.earthBrown,
                     onTap: () {
                       Navigator.pop(context);
@@ -412,7 +409,7 @@ class _AppDrawerState extends State<AppDrawer> {
 
                   _buildMenuItem(
                     icon: Icons.info_outline,
-                    title: "About Us",
+                    title: AppLocalizations.of(context)!.aboutUs,
                     iconColor: AppColor.earthBrown,
                     onTap: () {
                       Navigator.pop(context);
@@ -433,7 +430,7 @@ class _AppDrawerState extends State<AppDrawer> {
 
                   _buildMenuItem(
                     icon: Icons.logout,
-                    title: "Logout",
+                    title: AppLocalizations.of(context)!.logout,
                     iconColor: AppColor.warningColor,
                     textColor: AppColor.warningColor,
                     onTap: () {
@@ -543,7 +540,9 @@ class _AppDrawerState extends State<AppDrawer> {
           ),
         ),
         trailing: Icon(
-          Icons.arrow_forward_ios,
+          Directionality.of(context) == TextDirection.rtl
+              ? Icons.arrow_back_ios
+              : Icons.arrow_forward_ios,
           size: 16,
           color: AppColor.grey.withOpacity(0.5),
         ),
@@ -562,27 +561,27 @@ class _AppDrawerState extends State<AppDrawer> {
         backgroundColor: AppColor.cardBackground,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text(
-          "Logout",
+          AppLocalizations.of(context)!.logout,
           style: TextStyle(
             color: AppColor.primaryColor,
             fontWeight: FontWeight.bold,
           ),
         ),
         content: Text(
-          "Are you sure you want to logout?",
+          AppLocalizations.of(context)!.areYouSureLogout,
           style: TextStyle(color: AppColor.grey),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text("Cancel", style: TextStyle(color: AppColor.grey)),
+            child: Text(AppLocalizations.of(context)!.cancel, style: TextStyle(color: AppColor.grey)),
           ),
           ElevatedButton(
             onPressed: () async {
               Navigator.pop(context);
 
               // Clear user-specific preferences
-              LanguageManager.clearUserPreferences();
+              // Language preference is global — not cleared on logout
               ThemeManager.clearUserPreferences();
               FavoritesManager.clearUserPreferences();
 
@@ -609,7 +608,7 @@ class _AppDrawerState extends State<AppDrawer> {
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
-            child: Text("Logout"),
+            child: Text(AppLocalizations.of(context)!.logout),
           ),
         ],
       ),

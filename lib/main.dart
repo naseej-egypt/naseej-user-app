@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:naseej/utils/language_manager.dart';
 import 'package:naseej/utils/theme_manager.dart';
 import 'package:naseej/utils/favorites_manager.dart';
+import 'package:naseej/utils/session_manager.dart';
+import 'package:naseej/utils/app_navigator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:naseej/routes.dart';
-import 'package:get/get.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:naseej/l10n/app_localizations.dart';
 
 late SharedPreferences sharedPref;
 
@@ -18,7 +21,7 @@ void main() async {
   await ThemeManager.initialize();
   await FavoritesManager.initialize();
 
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -39,10 +42,11 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     _loadUserPreferences();
+    _validateSessionOnStartup();
   }
 
   void _loadUserPreferences() {
-    // Load saved language
+    // Load saved language (on first launch = device language, after = user choice)
     final languageCode = LanguageManager.getCurrentLanguageCode();
     _locale = Locale(languageCode);
 
@@ -52,10 +56,25 @@ class _MyAppState extends State<MyApp> {
     setState(() {});
   }
 
+  /// Validate session after the first frame renders.
+  /// If the session is expired, the user is silently redirected to login.
+  void _validateSessionOnStartup() {
+    final userId = sharedPref.getString('user_id');
+    if (userId == null || userId.isEmpty) return;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final isValid = await SessionManager.validateCurrentSession();
+      if (!isValid) {
+        await SessionManager.handleSessionExpiry();
+      }
+    });
+  }
+
   void changeLanguage(String languageCode) async {
     await LanguageManager.setLanguage(languageCode);
+    final newLocale = Locale(languageCode);
     setState(() {
-      _locale = Locale(languageCode);
+      _locale = newLocale;
     });
   }
 
@@ -70,18 +89,22 @@ class _MyAppState extends State<MyApp> {
   String _getInitialRoute() {
     String? step = sharedPref.getString("step");
     String? userId = sharedPref.getString("user_id");
+    bool termsAccepted = sharedPref.getBool('terms_accepted') ?? false;
 
     // If user is logged in, go to home
     if (userId != null && userId.isNotEmpty) {
-      // Initialize user-specific settings
-      LanguageManager.setCurrentUser(userId);
+      // Initialize user-specific settings (theme, favorites — NOT language)
       ThemeManager.setCurrentUser(userId);
       FavoritesManager.setCurrentUser(userId);
       return "/main";
     }
 
-    // If onboarding completed, go to login
+    // If onboarding completed
     if (step == "1") {
+      // Check if terms have been accepted
+      if (!termsAccepted) {
+        return "/terms-consent";
+      }
       return "/login";
     }
 
@@ -91,13 +114,15 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return MaterialApp(
       title: 'Naseej App',
       debugShowCheckedModeBanner: false,
+      navigatorKey: AppNavigator.navigatorKey,
+      scaffoldMessengerKey: AppNavigator.messengerKey,
 
       // Localization delegates
       localizationsDelegates: const [
-        //AppLocalizations.delegate,
+        AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
@@ -109,11 +134,8 @@ class _MyAppState extends State<MyApp> {
         Locale('ar', ''), // Arabic
       ],
 
-      // Current locale
+      // Current locale — always from saved preference, NOT system
       locale: _locale,
-
-      // Fallback locale
-      fallbackLocale: const Locale('en', ''),
 
       // Theme configuration
       theme: AppThemes.lightTheme,
@@ -121,7 +143,8 @@ class _MyAppState extends State<MyApp> {
       themeMode: _themeMode,
 
       // Routes
-      getPages: routes,
+      routes: routes,
+      onGenerateRoute: onGenerateRoute,
       initialRoute: _getInitialRoute(),
     );
   }

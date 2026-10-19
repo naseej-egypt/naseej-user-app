@@ -1,7 +1,6 @@
-import 'dart:io';
+import 'dart:typed_data';
 import "dart:convert";
 import 'package:http/http.dart' as http;
-import 'package:path/path.dart'; // For basename function
 
 class Crud{
   getRequest(String url) async{
@@ -37,18 +36,16 @@ class Crud{
     }
   }
 
-  postRequestWithFile(String url, Map<String, String> data, File file) async {
+  /// Web-compatible file upload using bytes
+  postRequestWithFileBytes(String url, Map<String, String> data, Uint8List fileBytes, String fileName) async {
     try {
       var request = http.MultipartRequest("POST", Uri.parse(url));
 
-      // Add the file
-      var length = await file.length();
-      var stream = http.ByteStream(file.openRead());
-      var multipartFile = http.MultipartFile(
+      // Add the file from bytes
+      var multipartFile = http.MultipartFile.fromBytes(
           "file",
-          stream,
-          length,
-          filename: basename(file.path)
+          fileBytes,
+          filename: fileName
       );
       request.files.add(multipartFile);
 
@@ -76,5 +73,4 @@ class Crud{
   static http.Client _getHttpClient() {
     return http.Client();
   }
-
 }

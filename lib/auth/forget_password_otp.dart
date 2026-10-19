@@ -7,6 +7,7 @@ import 'package:naseej/component/crud.dart';
 import 'package:naseej/auth/reset_password.dart';
 import '../core/functions/checkinternet.dart';
 import '../core/middleware/internet_middleware.dart';
+import 'package:naseej/l10n/app_localizations.dart';
 
 class ForgetPasswordOTPPage extends StatefulWidget {
   final String email;
@@ -62,7 +63,7 @@ class _ForgetPasswordOTPPageState extends State<ForgetPasswordOTPPage> {
         SnackBar(
           backgroundColor: AppColor.backgroundcolor2,
           content: Text(
-            "Please enter the complete 6-digit code",
+            AppLocalizations.of(context)!.pleaseEnterComplete6DigitCode,
             style: TextStyle(color: AppColor.warningColor),
           ),
         ),
@@ -88,7 +89,7 @@ class _ForgetPasswordOTPPageState extends State<ForgetPasswordOTPPage> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Verification successful!"),
+          content: Text(AppLocalizations.of(context)!.verificationSuccessful),
           backgroundColor: AppColor.successColor,
         ),
       );
@@ -106,7 +107,7 @@ class _ForgetPasswordOTPPageState extends State<ForgetPasswordOTPPage> {
         );
       });
     } else {
-      String errorMessage = response["message"] ?? "Verification failed";
+      String errorMessage = response["message"] ?? AppLocalizations.of(context)!.verificationFailed;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: AppColor.backgroundcolor2,
@@ -150,12 +151,12 @@ class _ForgetPasswordOTPPageState extends State<ForgetPasswordOTPPage> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Verification code resent!"),
+          content: Text(AppLocalizations.of(context)!.verificationCodeResent),
           backgroundColor: AppColor.successColor,
         ),
       );
     } else {
-      String errorMessage = response["message"] ?? "Failed to resend code";
+      String errorMessage = response["message"] ?? AppLocalizations.of(context)!.failedToResendCode;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: AppColor.backgroundcolor2,
@@ -179,12 +180,12 @@ class _ForgetPasswordOTPPageState extends State<ForgetPasswordOTPPage> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: AppColor.backgroundcolor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        foregroundColor: AppColor.primaryColor,
+        foregroundColor: Theme.of(context).colorScheme.primary,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -208,13 +209,13 @@ class _ForgetPasswordOTPPageState extends State<ForgetPasswordOTPPage> {
                   height: 80,
                   margin: EdgeInsets.only(bottom: 20),
                   decoration: BoxDecoration(
-                    color: AppColor.primaryColor.withOpacity(0.1),
+                    color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
                     Icons.phonelink_lock,
                     size: 40,
-                    color: AppColor.primaryColor,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
 
@@ -222,11 +223,11 @@ class _ForgetPasswordOTPPageState extends State<ForgetPasswordOTPPage> {
 
                 // Title
                 Text(
-                  "Enter Verification Code",
+                  AppLocalizations.of(context)!.enterVerificationCode,
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    color: AppColor.primaryColor,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
 
@@ -234,10 +235,10 @@ class _ForgetPasswordOTPPageState extends State<ForgetPasswordOTPPage> {
 
                 // Description
                 Text(
-                  "We've sent a 6-digit code to",
+                  AppLocalizations.of(context)!.weSentCodeTo,
                   style: TextStyle(
                     fontSize: 16,
-                    color: AppColor.grey,
+                    color: Theme.of(context).textTheme.bodyMedium?.color ?? const Color(0xFF666666),
                   ),
                 ),
 
@@ -249,7 +250,7 @@ class _ForgetPasswordOTPPageState extends State<ForgetPasswordOTPPage> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: AppColor.primaryColor,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
 
@@ -266,12 +267,12 @@ class _ForgetPasswordOTPPageState extends State<ForgetPasswordOTPPage> {
                     borderRadius: BorderRadius.circular(12),
                     fieldHeight: 60,
                     fieldWidth: 50,
-                    activeFillColor: isDark ? Color(0xFF2C2520) : Colors.white,
-                    activeColor: AppColor.primaryColor,
-                    selectedColor: AppColor.secondColor,
-                    selectedFillColor: isDark ? Color(0xFF2C2520) : Colors.white,
-                    inactiveColor: AppColor.borderGray,
-                    inactiveFillColor: isDark ? Color(0xFF2C2520) : Colors.white,
+                    activeFillColor: isDark ? const Color(0xFF2C2520) : Colors.white,
+                    activeColor: Theme.of(context).colorScheme.primary,
+                    selectedColor: Theme.of(context).colorScheme.secondary,
+                    selectedFillColor: isDark ? const Color(0xFF2C2520) : Colors.white,
+                    inactiveColor: isDark ? const Color(0xFF4A4036) : const Color(0xFFE0E0E0),
+                    inactiveFillColor: isDark ? const Color(0xFF2C2520) : Colors.white,
                   ),
                   animationDuration: Duration(milliseconds: 300),
                   backgroundColor: Colors.transparent,
@@ -287,7 +288,7 @@ class _ForgetPasswordOTPPageState extends State<ForgetPasswordOTPPage> {
 
                 // Verify Button
                 Button(
-                  title: "Verify",
+                  title: AppLocalizations.of(context)!.verify,
                   isLoading: _isLoading,
                   onpressed: _verifyOTP,
                 ),
@@ -300,10 +301,10 @@ class _ForgetPasswordOTPPageState extends State<ForgetPasswordOTPPage> {
                   child: Column(
                     children: [
                       Text(
-                        "Didn't receive the code?",
+                        AppLocalizations.of(context)!.didntReceiveCode,
                         style: TextStyle(
                           fontSize: 14,
-                          color: AppColor.grey,
+                          color: Theme.of(context).textTheme.bodyMedium?.color ?? const Color(0xFF666666),
                         ),
                       ),
 
@@ -324,20 +325,20 @@ class _ForgetPasswordOTPPageState extends State<ForgetPasswordOTPPage> {
                             ),
                           )
                               : Text(
-                            "Resend Code",
+                            AppLocalizations.of(context)!.resendCode,
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
-                              color: AppColor.primaryColor,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                         )
                       else
                         Text(
-                          "Resend code in $_resendCountdown seconds",
+                          AppLocalizations.of(context)!.resendCodeIn(_resendCountdown),
                           style: TextStyle(
                             fontSize: 14,
-                            color: AppColor.grey,
+                            color: Theme.of(context).textTheme.bodyMedium?.color ?? const Color(0xFF666666),
                             fontWeight: FontWeight.w500,
                           ),
                         ),

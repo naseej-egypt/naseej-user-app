@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:naseej/core/constant/app_colors.dart';
-import 'package:naseej/static.dart';
+
 
 class CustomDotControllerOnBoarding extends StatelessWidget {
   final int currentPage;
@@ -16,9 +16,9 @@ class CustomDotControllerOnBoarding extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ...List.generate(
-          onBoardingList.length,
+          3,
               (index) => AnimatedContainer(
-            margin: const EdgeInsets.only(right: 5),
+            margin: const EdgeInsetsDirectional.only(end: 5),
             duration: const Duration(milliseconds: 900),
             width: currentPage == index ? 20 : 5,
             height: 6,

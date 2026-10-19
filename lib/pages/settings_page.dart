@@ -7,7 +7,9 @@ import '../core/DeleteAccountController.dart';
 import 'change_password_screen.dart';
 import 'payment/payment_methods_page.dart';
 import 'package:naseej/utils/helpsupport.dart';
-import 'package:get/get.dart';
+import 'package:naseej/pages/legal_page.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:naseej/l10n/app_localizations.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -54,7 +56,7 @@ class _SettingsPageState extends State<SettingsPage> {
           backgroundColor: AppColor.cardBackground,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           title: Text(
-            "selectLanguage",
+            AppLocalizations.of(context)!.selectLanguage,
             style: TextStyle(color: AppColor.primaryColor, fontWeight: FontWeight.bold),
           ),
           content: Column(
@@ -96,7 +98,7 @@ class _SettingsPageState extends State<SettingsPage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text("cancel", style: TextStyle(color: AppColor.grey)),
+              child: Text(AppLocalizations.of(context)!.cancel, style: TextStyle(color: AppColor.grey)),
             ),
           ],
         );
@@ -113,21 +115,21 @@ class _SettingsPageState extends State<SettingsPage> {
           backgroundColor: AppColor.cardBackground,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           title: Text(
-            "Them Mode",
+            AppLocalizations.of(context)!.themeMode,
             style: TextStyle(color: AppColor.primaryColor, fontWeight: FontWeight.bold),
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _buildThemeOption(ThemeMode.light, "Light", "Always Use Light", Icons.light_mode),
-              _buildThemeOption(ThemeMode.dark, "Dark", "Always Use Dark", Icons.dark_mode),
-              _buildThemeOption(ThemeMode.system, "System", "Follow System Theme", Icons.brightness_auto),
+              _buildThemeOption(ThemeMode.light, AppLocalizations.of(context)!.light, AppLocalizations.of(context)!.alwaysUseLight, Icons.light_mode),
+              _buildThemeOption(ThemeMode.dark, AppLocalizations.of(context)!.dark, AppLocalizations.of(context)!.alwaysUseDark, Icons.dark_mode),
+              _buildThemeOption(ThemeMode.system, AppLocalizations.of(context)!.system, AppLocalizations.of(context)!.followSystemTheme, Icons.brightness_auto),
             ],
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text("cancel", style: TextStyle(color: AppColor.grey)),
+              child: Text(AppLocalizations.of(context)!.cancel, style: TextStyle(color: AppColor.grey)),
             ),
           ],
         );
@@ -181,7 +183,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text("Language Changed Successfully"),
+        content: Text(AppLocalizations.of(context)!.languageChangedSuccessfully),
         backgroundColor: AppColor.successColor,
         behavior: SnackBarBehavior.floating,
       ),
@@ -198,7 +200,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text("Theme Changed Successfully"),
+        content: Text(AppLocalizations.of(context)!.themeChangedSuccessfully),
         backgroundColor: AppColor.primaryColor,
         behavior: SnackBarBehavior.floating,
       ),
@@ -215,13 +217,14 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   String _getThemeName(ThemeMode mode) {
+    final l10n = AppLocalizations.of(context);
     switch (mode) {
       case ThemeMode.light:
-        return "Light";
+        return l10n?.light ?? "Light";
       case ThemeMode.dark:
-        return "Dark";
+        return l10n?.dark ?? "Dark";
       case ThemeMode.system:
-        return "System";
+        return l10n?.system ?? "System";
     }
   }
 
@@ -232,7 +235,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return Scaffold(
       backgroundColor: isDark ? Color(0xFF1A1614) : AppColor.backgroundcolor,
       appBar: AppBar(
-        title: Text("Settings"),
+        title: Text(AppLocalizations.of(context)!.settings),
         backgroundColor: AppColor.primaryColor,
         foregroundColor: Colors.white,
       ),
@@ -240,12 +243,12 @@ class _SettingsPageState extends State<SettingsPage> {
         padding: EdgeInsets.all(16),
         children: [
           // App Settings Section
-          _buildSectionHeader("App Settings", Icons.tune),
+          _buildSectionHeader(AppLocalizations.of(context)!.appSettings, Icons.tune),
           SizedBox(height: 12),
 
           _buildListTile(
             icon: Icons.language,
-            title: "language",
+            title: AppLocalizations.of(context)!.language,
             subtitle: _getLanguageName(currentLanguage),
             onTap: _showLanguageDialog,
             color: AppColor.primaryColor,
@@ -253,7 +256,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
           _buildListTile(
             icon: Icons.palette_outlined,
-            title: "Thems",
+            title: AppLocalizations.of(context)!.theme,
             subtitle: _getThemeName(currentThemeMode),
             onTap: _showThemeDialog,
             color: AppColor.goldAccent,
@@ -261,8 +264,8 @@ class _SettingsPageState extends State<SettingsPage> {
 
           _buildSwitchTile(
             icon: Icons.dark_mode_outlined,
-            title: "Dark Mode",
-            subtitle: "Quick Toggle",
+            title: AppLocalizations.of(context)!.darkMode,
+            subtitle: AppLocalizations.of(context)!.quickToggle,
             value: darkModeEnabled,
             onChanged: (value) {
               ThemeMode newMode = value ? ThemeMode.dark : ThemeMode.light;
@@ -270,11 +273,11 @@ class _SettingsPageState extends State<SettingsPage> {
             },
             color: AppColor.earthBrown,
           ),
-
+/*
           _buildSwitchTile(
             icon: Icons.notifications_outlined,
-            title: "Push Notifications",
-            subtitle: "Receive Notifications",
+            title: AppLocalizations.of(context)!.pushNotifications,
+            subtitle: AppLocalizations.of(context)!.receiveNotifications,
             value: notificationsEnabled,
             onChanged: (value) {
               setState(() {
@@ -284,7 +287,7 @@ class _SettingsPageState extends State<SettingsPage> {
             },
             color: AppColor.secondColor,
           ),
-
+*/
           // _buildSwitchTile(
           //   icon: Icons.save_outlined,
           //   title: "autoSave",
@@ -302,13 +305,13 @@ class _SettingsPageState extends State<SettingsPage> {
           SizedBox(height: 32),
 
           // Account Settings Section
-          _buildSectionHeader("account", Icons.person_outline),
+          _buildSectionHeader(AppLocalizations.of(context)!.account, Icons.person_outline),
           SizedBox(height: 12),
 
           _buildListTile(
             icon: Icons.payment_outlined,
-            title: "Payment Methods",
-            subtitle: "Manage Your Payment Methods",
+            title: AppLocalizations.of(context)!.paymentMethods,
+            subtitle: AppLocalizations.of(context)!.managePaymentMethods,
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => const PaymentMethodsPage()),
@@ -319,8 +322,8 @@ class _SettingsPageState extends State<SettingsPage> {
 
           _buildListTile(
             icon: Icons.lock_outline,
-            title: "Change Password",
-            subtitle: "Update Account Password",
+            title: AppLocalizations.of(context)!.changePassword,
+            subtitle: AppLocalizations.of(context)!.updateAccountPassword,
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => const ChangePasswordScreen()),
@@ -331,8 +334,8 @@ class _SettingsPageState extends State<SettingsPage> {
 
           _buildListTile(
             icon: Icons.delete_outline,
-            title: "Delete Account",
-            subtitle: "Delete Account Permanently",
+            title: AppLocalizations.of(context)!.deleteAccount,
+            subtitle: AppLocalizations.of(context)!.deleteAccountPermanently,
             textColor: AppColor.warningColor,
             onTap: () {
               _showDeleteAccountDialog();
@@ -343,23 +346,45 @@ class _SettingsPageState extends State<SettingsPage> {
           SizedBox(height: 32),
 
           // Support Section
-          _buildSectionHeader("Support", Icons.help_outline),
+          _buildSectionHeader(AppLocalizations.of(context)!.support, Icons.help_outline),
           SizedBox(height: 12),
 
           _buildListTile(
             icon: Icons.help_outline,
-            title: "Help FAQ",
-            subtitle: "Get Help Answers",
+            title: AppLocalizations.of(context)!.helpFaq,
+            subtitle: AppLocalizations.of(context)!.getHelpAnswers,
             onTap: () => HelpSupportUtils.openHelpFAQ(context),
             color: AppColor.goldAccent,
           ),
 
           _buildListTile(
             icon: Icons.bug_report_outlined,
-            title: "Report Bug",
-            subtitle: "Help Improve App",
+            title: AppLocalizations.of(context)!.reportBug,
+            subtitle: AppLocalizations.of(context)!.helpImproveApp,
             onTap: () => HelpSupportUtils.reportBug(context),
             color: AppColor.secondColor,
+          ),
+
+          SizedBox(height: 32),
+
+          // Legal Section
+          _buildSectionHeader(AppLocalizations.of(context)!.legal, Icons.gavel_outlined),
+          SizedBox(height: 12),
+
+          _buildListTile(
+            icon: Icons.privacy_tip_outlined,
+            title: AppLocalizations.of(context)!.privacyPolicy,
+            subtitle: AppLocalizations.of(context)!.viewPrivacyPolicy,
+            onTap: () => LegalPage.openPrivacyPolicy(context),
+            color: AppColor.primaryColor,
+          ),
+
+          _buildListTile(
+            icon: Icons.description_outlined,
+            title: AppLocalizations.of(context)!.termsOfService,
+            subtitle: AppLocalizations.of(context)!.viewTermsOfService,
+            onTap: () => LegalPage.openTermsOfService(context),
+            color: AppColor.earthBrown,
           ),
 
           SizedBox(height: 32),
@@ -397,7 +422,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  "${"version"} 1.0.0",
+                  "${AppLocalizations.of(context)!.version} 1.0.0",
                   style: TextStyle(
                     color: Colors.white.withOpacity(0.9),
                     fontSize: 14,
@@ -405,7 +430,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  'Handcrafted Egyptian Carpets',
+                  AppLocalizations.of(context)!.handcraftedEgyptianCarpets,
                   style: TextStyle(
                     color: Colors.white.withOpacity(0.8),
                     fontSize: 13,
@@ -554,7 +579,9 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
         trailing: Icon(
-          Icons.arrow_forward_ios,
+          Directionality.of(context) == TextDirection.rtl
+              ? Icons.arrow_back_ios
+              : Icons.arrow_forward_ios,
           size: 16,
           color: AppColor.grey.withOpacity(0.5),
         ),
@@ -567,96 +594,99 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   void _showDeleteAccountDialog() {
-    final DeleteAccountController _deleteController = Get.put(DeleteAccountController());
-
     showDialog(
       context: context,
       barrierDismissible: false, // Prevent dismissing by tapping outside
-      builder: (context) => Obx(() => AlertDialog(
-        backgroundColor: AppColor.cardBackground,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Row(
-          children: [
-            Icon(Icons.warning_amber_rounded, color: AppColor.warningColor, size: 28),
-            SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                "Delete Account Permanently?",
-                style: TextStyle(
-                  color: AppColor.warningColor,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+      builder: (context) => Consumer(
+        builder: (context, ref, _) {
+          final deleteController = ref.watch(deleteAccountProvider);
+          return AlertDialog(
+            backgroundColor: AppColor.cardBackground,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            title: Row(
+              children: [
+                Icon(Icons.warning_amber_rounded, color: AppColor.warningColor, size: 28),
+                SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    AppLocalizations.of(context)!.deleteAccountConfirmTitle,
+                    style: TextStyle(
+                      color: AppColor.warningColor,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "This action cannot be undone. All your data will be permanently deleted:",
-              style: TextStyle(color: AppColor.grey, fontSize: 14),
-            ),
-            SizedBox(height: 12),
-            _buildWarningItem("Personal information and profile"),
-            _buildWarningItem("Order history"),
-            _buildWarningItem("Saved addresses"),
-            _buildWarningItem("Favorite products"),
-            SizedBox(height: 12),
-            if (_deleteController.errorMessage.isNotEmpty)
-              Container(
-                padding: EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: AppColor.warningColor.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  AppLocalizations.of(context)!.deleteAccountWarning,
+                  style: TextStyle(color: AppColor.grey, fontSize: 14),
                 ),
-                child: Text(
-                  _deleteController.errorMessage.value,
-                  style: TextStyle(color: AppColor.warningColor, fontSize: 12),
+                SizedBox(height: 12),
+                _buildWarningItem(AppLocalizations.of(context)!.personalInfoAndProfile),
+                _buildWarningItem(AppLocalizations.of(context)!.orderHistory),
+                _buildWarningItem(AppLocalizations.of(context)!.savedAddresses),
+                _buildWarningItem(AppLocalizations.of(context)!.favoriteProducts),
+                SizedBox(height: 12),
+                if (deleteController.errorMessage.isNotEmpty)
+                  Container(
+                    padding: EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppColor.warningColor.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      deleteController.errorMessage,
+                      style: TextStyle(color: AppColor.warningColor, fontSize: 12),
+                    ),
+                  ),
+              ],
+            ),
+            actions: [
+              if (!deleteController.isLoading)
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(
+                    AppLocalizations.of(context)!.cancel,
+                    style: TextStyle(color: AppColor.grey, fontSize: 16),
+                  ),
                 ),
+              ElevatedButton(
+                onPressed: deleteController.isLoading ? null : () async {
+                  final success = await deleteController.deleteAccount();
+                  if (success) {
+                    Navigator.pop(context);
+                    _showSuccessDialog();
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColor.warningColor,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                ),
+                child: deleteController.isLoading
+                    ? SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                    : Text(
+                        AppLocalizations.of(context)!.deleteAccount,
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
               ),
-          ],
-        ),
-        actions: [
-          if (!_deleteController.isLoading.value)
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(
-                "Cancel",
-                style: TextStyle(color: AppColor.grey, fontSize: 16),
-              ),
-            ),
-          ElevatedButton(
-            onPressed: _deleteController.isLoading.value ? null : () async {
-              final success = await _deleteController.deleteAccount();
-              if (success) {
-                Navigator.pop(context);
-                _showSuccessDialog();
-              }
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColor.warningColor,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-            ),
-            child: _deleteController.isLoading.value
-                ? SizedBox(
-              width: 20,
-              height: 20,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                color: Colors.white,
-              ),
-            )
-                : Text(
-              "Delete Account",
-              style: TextStyle(color: Colors.white, fontSize: 16),
-            ),
-          ),
-        ],
-      )),
+            ],
+          );
+        },
+      ),
     );
   }
 
@@ -688,17 +718,17 @@ class _SettingsPageState extends State<SettingsPage> {
             children: [
               Icon(Icons.check_circle, color: AppColor.successColor),
               SizedBox(width: 12),
-              Text("Account Deleted", style: TextStyle(color: AppColor.successColor)),
+              Text(AppLocalizations.of(context)!.accountDeleted, style: TextStyle(color: AppColor.successColor)),
             ],
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Your account has been deleted successfully."),
+              Text(AppLocalizations.of(context)!.accountDeletedSuccess),
               SizedBox(height: 8),
               Text(
-                "All your data has been permanently removed from our system.",
+                AppLocalizations.of(context)!.allDataRemoved,
                 style: TextStyle(fontSize: 14, color: AppColor.grey),
               ),
             ],
@@ -708,7 +738,7 @@ class _SettingsPageState extends State<SettingsPage> {
               onPressed: () {
                 _logoutAndNavigate();
               },
-              child: Text("OK", style: TextStyle(color: AppColor.primaryColor)),
+              child: Text(AppLocalizations.of(context)!.ok, style: TextStyle(color: AppColor.primaryColor)),
             ),
           ],
         );

@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:naseej/core/constant/app_colors.dart';
+import 'package:naseej/l10n/app_localizations.dart';
 
 class HelpSupportUtils {
   // Configuration - Update these with your actual URLs and email
-  static const String FAQ_URL = 'https://appforyou.store/backendnaseej/web/faq.html';
-  static const String BUG_REPORT_URL = 'https://appforyou.store/backendnaseej/web/bug-report.html';
-  static const String SUPPORT_EMAIL = 'support@naseej.com';
+  static const String FAQ_URL = 'https://appforyou.store/Naseej/faq.html';
+  static const String BUG_REPORT_URL = 'https://appforyou.store/Naseej/bug-report.html';
+  static const String SUPPORT_EMAIL = 'yasergaber@gmail.com';
   static const String WHATSAPP_NUMBER = '201003640081'; // Include country code without +
   static const String APP_NAME = 'Naseej';
   static const String APP_VERSION = '1.0.0';
@@ -44,7 +45,7 @@ class HelpSupportUtils {
                 Icon(Icons.help_outline, color: AppColor.primaryColor, size: 28),
                 SizedBox(width: 12),
                 Text(
-                  "Help FAQ",
+                  AppLocalizations.of(context)!.helpFaqTitle,
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
@@ -55,7 +56,7 @@ class HelpSupportUtils {
             ),
             SizedBox(height: 8),
             Text(
-              "Get Help Answers",
+                  AppLocalizations.of(context)!.getHelpAnswers,
               style: TextStyle(
                 fontSize: 14,
                 color: AppColor.grey,
@@ -68,8 +69,8 @@ class HelpSupportUtils {
             _buildOptionCard(
               context: context,
               icon: Icons.language,
-              title: 'Visit FAQ Page',
-              subtitle: 'Browse our comprehensive FAQ',
+              title: AppLocalizations.of(context)!.visitFAQPage,
+              subtitle: AppLocalizations.of(context)!.browseFAQ,
               color: AppColor.primaryColor,
               onTap: () {
                 Navigator.pop(context);
@@ -83,8 +84,8 @@ class HelpSupportUtils {
             _buildOptionCard(
               context: context,
               icon: Icons.email_outlined,
-              title: 'Email Support',
-              subtitle: 'Get help via email',
+              title: AppLocalizations.of(context)!.emailSupport,
+              subtitle: AppLocalizations.of(context)!.getHelpViaEmail,
               color: AppColor.goldAccent,
               onTap: () {
                 Navigator.pop(context);
@@ -98,8 +99,8 @@ class HelpSupportUtils {
             _buildOptionCard(
               context: context,
               icon: Icons.chat_outlined,
-              title: 'WhatsApp Support',
-              subtitle: 'Chat with our support team',
+              title: AppLocalizations.of(context)!.whatsappSupport,
+              subtitle: AppLocalizations.of(context)!.chatWithSupport,
               color: AppColor.secondColor,
               onTap: () {
                 Navigator.pop(context);
@@ -151,7 +152,7 @@ class HelpSupportUtils {
                   Icon(Icons.bug_report, color: AppColor.warningColor, size: 28),
                   SizedBox(width: 12),
                   Text(
-                    "Report Bug",
+                    AppLocalizations.of(context)!.reportBugTitle,
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -162,7 +163,7 @@ class HelpSupportUtils {
               ),
               SizedBox(height: 8),
               Text(
-                "Help Improve App",
+                  AppLocalizations.of(context)!.helpImproveApp,
                 style: TextStyle(
                   fontSize: 14,
                   color: AppColor.grey,
@@ -175,8 +176,8 @@ class HelpSupportUtils {
               _buildOptionCard(
                 context: context,
                 icon: Icons.email_outlined,
-                title: 'Email Bug Report',
-                subtitle: 'Send detailed bug report via email',
+                title: AppLocalizations.of(context)!.emailBugReport,
+                subtitle: AppLocalizations.of(context)!.sendDetailedBugReport,
                 color: AppColor.primaryColor,
                 onTap: () {
                   Navigator.pop(context);
@@ -190,8 +191,8 @@ class HelpSupportUtils {
               _buildOptionCard(
                 context: context,
                 icon: Icons.description_outlined,
-                title: 'Submit Bug Report Form',
-                subtitle: 'Fill out our online form',
+                title: AppLocalizations.of(context)!.submitBugReportForm,
+                subtitle: AppLocalizations.of(context)!.fillOutOnlineForm,
                 color: AppColor.goldAccent,
                 onTap: () {
                   Navigator.pop(context);
@@ -205,8 +206,8 @@ class HelpSupportUtils {
               _buildOptionCard(
                 context: context,
                 icon: Icons.chat_outlined,
-                title: 'Report via WhatsApp',
-                subtitle: 'Quick report through WhatsApp',
+                title: AppLocalizations.of(context)!.reportViaWhatsApp,
+                subtitle: AppLocalizations.of(context)!.quickReportWhatsApp,
                 color: AppColor.secondColor,
                 onTap: () {
                   Navigator.pop(context);
@@ -283,7 +284,9 @@ class HelpSupportUtils {
               ),
             ),
             Icon(
-              Icons.arrow_forward_ios,
+              Directionality.of(context) == TextDirection.rtl
+                  ? Icons.arrow_back_ios
+                  : Icons.arrow_forward_ios,
               size: 16,
               color: color.withOpacity(0.5),
             ),
@@ -304,10 +307,10 @@ class HelpSupportUtils {
       );
 
       if (!launched) {
-        _showErrorSnackBar(context, 'Could not open the page. Please try again.');
+        _showErrorSnackBar(context, AppLocalizations.of(context)!.couldNotOpenPage);
       }
     } catch (e) {
-      _showErrorSnackBar(context, 'Error opening page: ${e.toString()}');
+      _showErrorSnackBar(context, '${AppLocalizations.of(context)!.errorOpeningPage}: ${e.toString()}');
     }
   }
 
@@ -363,7 +366,7 @@ $emailBody
           subject: '$APP_NAME - Support Request',
         );
       } catch (shareError) {
-        _showErrorSnackBar(context, 'Could not open email. Please contact: $SUPPORT_EMAIL');
+        _showErrorSnackBar(context, '${AppLocalizations.of(context)!.couldNotOpenEmail}$SUPPORT_EMAIL');
       }
     }
   }
@@ -430,7 +433,7 @@ $emailBody
           subject: '$APP_NAME - Bug Report',
         );
       } catch (shareError) {
-        _showErrorSnackBar(context, 'Could not open email. Please contact: $SUPPORT_EMAIL');
+        _showErrorSnackBar(context, '${AppLocalizations.of(context)!.couldNotOpenEmail}$SUPPORT_EMAIL');
       }
     }
   }
@@ -438,7 +441,7 @@ $emailBody
   // WhatsApp support
   static Future<void> _openWhatsAppSupport(BuildContext context) async {
     try {
-      const String message = 'Hello, I need help with Naseej app';
+      final String message = AppLocalizations.of(context)!.helloNeedHelp;
 
       // Try WhatsApp with phone number
       final String whatsappUrl = 'https://wa.me/$WHATSAPP_NUMBER?text=${Uri.encodeComponent(message)}';
@@ -450,10 +453,10 @@ $emailBody
       );
 
       if (!launched) {
-        _showErrorSnackBar(context, 'Could not open WhatsApp. Please ensure it\'s installed.');
+        _showErrorSnackBar(context, AppLocalizations.of(context)!.couldNotOpenWhatsApp);
       }
     } catch (e) {
-      _showErrorSnackBar(context, 'Error opening WhatsApp: ${e.toString()}');
+      _showErrorSnackBar(context, '${AppLocalizations.of(context)!.errorOpeningWhatsApp}: ${e.toString()}');
     }
   }
 
@@ -482,10 +485,10 @@ Platform: ${Theme.of(context).platform}
       );
 
       if (!launched) {
-        _showErrorSnackBar(context, 'Could not open WhatsApp. Please ensure it\'s installed.');
+        _showErrorSnackBar(context, AppLocalizations.of(context)!.couldNotOpenWhatsApp);
       }
     } catch (e) {
-      _showErrorSnackBar(context, 'Error opening WhatsApp: ${e.toString()}');
+      _showErrorSnackBar(context, '${AppLocalizations.of(context)!.errorOpeningWhatsApp}: ${e.toString()}');
     }
   }
 
@@ -505,7 +508,7 @@ Platform: ${Theme.of(context).platform}
         behavior: SnackBarBehavior.floating,
         duration: Duration(seconds: 4),
         action: SnackBarAction(
-          label: 'OK',
+          label: AppLocalizations.of(context)!.ok,
           textColor: Colors.white,
           onPressed: () {},
         ),

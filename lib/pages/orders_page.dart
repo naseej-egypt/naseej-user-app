@@ -6,6 +6,7 @@ import 'package:naseej/main.dart';
 import 'package:naseej/core/services/cart_service.dart';
 import 'package:naseej/pages/order_details_page.dart';
 import 'main_container.dart';
+import 'package:naseej/l10n/app_localizations.dart';
 
 class OrdersPage extends StatefulWidget {
   const OrdersPage({Key? key}) : super(key: key);
@@ -120,19 +121,19 @@ class _OrdersPageState extends State<OrdersPage> with SingleTickerProviderStateM
           children: [
             Icon(Icons.cancel_outlined, color: AppColor.warningColor),
             SizedBox(width: 12),
-            Text('Cancel Order', style: TextStyle(color: AppColor.primaryColor)),
+            Text(AppLocalizations.of(context)!.cancelOrder, style: TextStyle(color: AppColor.primaryColor)),
           ],
         ),
-        content: Text('Are you sure you want to cancel this order? This action cannot be undone.'),
+        content: Text(AppLocalizations.of(context)!.cancelOrderConfirm),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: Text('Keep Order', style: TextStyle(color: AppColor.grey)),
+            child: Text(AppLocalizations.of(context)!.keepOrder, style: TextStyle(color: AppColor.grey)),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(backgroundColor: AppColor.warningColor),
-            child: Text('Cancel Order'),
+            child: Text(AppLocalizations.of(context)!.cancelOrder),
           ),
         ],
       ),
@@ -203,9 +204,9 @@ class _OrdersPageState extends State<OrdersPage> with SingleTickerProviderStateM
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('This order was previously cancelled.'),
+              Text('This order was previously cancelled.'), // Localize later if needed
               SizedBox(height: 8),
-              Text('Please verify product availability and pricing before proceeding.',
+              Text('Please verify product availability and pricing before proceeding.', // Localize later
                   style: TextStyle(fontSize: 12, color: AppColor.grey)),
             ],
           ),
@@ -347,7 +348,7 @@ class _OrdersPageState extends State<OrdersPage> with SingleTickerProviderStateM
               );
             },
             style: ElevatedButton.styleFrom(backgroundColor: AppColor.primaryColor),
-            child: Text('View Cart'),
+            child: Text(AppLocalizations.of(context)!.viewCart),
           ),
         ],
       ),
@@ -403,7 +404,7 @@ class _OrdersPageState extends State<OrdersPage> with SingleTickerProviderStateM
     return Scaffold(
       backgroundColor: isDark ? Color(0xFF1A1614) : AppColor.backgroundcolor,
       appBar: AppBar(
-        title: Text('My Orders'),
+        title: Text(AppLocalizations.of(context)!.myOrders),
         backgroundColor: AppColor.primaryColor,
         foregroundColor: Colors.white,
         leading: IconButton(
@@ -426,9 +427,9 @@ class _OrdersPageState extends State<OrdersPage> with SingleTickerProviderStateM
             fontSize: 14,
           ),
           tabs: [
-            Tab(text: 'Active (${activeOrders.length})'),
-            Tab(text: 'Completed (${completedOrders.length})'),
-            Tab(text: 'Cancelled (${cancelledOrders.length})'),
+            Tab(text: '${AppLocalizations.of(context)!.activeOrders} (${activeOrders.length})'),
+            Tab(text: '${AppLocalizations.of(context)!.completedOrders} (${completedOrders.length})'),
+            Tab(text: '${AppLocalizations.of(context)!.cancelled} (${cancelledOrders.length})'),
           ],
         ),
       ),
@@ -497,7 +498,7 @@ class _OrdersPageState extends State<OrdersPage> with SingleTickerProviderStateM
             ),
             SizedBox(height: 24),
             Text(
-              'No Orders Yet',
+              AppLocalizations.of(context)!.noOrdersYet,
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -506,7 +507,7 @@ class _OrdersPageState extends State<OrdersPage> with SingleTickerProviderStateM
             ),
             SizedBox(height: 12),
             Text(
-              'Your orders will appear here once you make a purchase',
+              AppLocalizations.of(context)!.startShoppingToSeeOrders,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16,
@@ -526,7 +527,7 @@ class _OrdersPageState extends State<OrdersPage> with SingleTickerProviderStateM
                 backgroundColor: AppColor.primaryColor,
                 padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
               ),
-              child: Text('Start Shopping', style: TextStyle(color: Colors.white)),
+              child: Text(AppLocalizations.of(context)!.startShopping ?? 'Start Shopping', style: TextStyle(color: Colors.white)),
             ),
           ],
         ),
@@ -701,7 +702,7 @@ class _OrdersPageState extends State<OrdersPage> with SingleTickerProviderStateM
                 fontWeight: FontWeight.bold,
                 color: AppColor.goldAccent,
               ),
-              textAlign: TextAlign.right,
+              textAlign: TextAlign.end,
             ),
           ),
         ],
@@ -812,7 +813,7 @@ class _OrdersPageState extends State<OrdersPage> with SingleTickerProviderStateM
     switch (status) {
       case OrderStatus.preparing:
         return StatusInfo(
-          text: 'Preparing',
+          text: AppLocalizations.of(context)!.orderStatusPreparing,
           color: AppColor.goldAccent,
           icon: Icons.schedule_outlined,
         );
@@ -830,7 +831,7 @@ class _OrdersPageState extends State<OrdersPage> with SingleTickerProviderStateM
         );
       case OrderStatus.cancelled:
         return StatusInfo(
-          text: 'Cancelled',
+          text: AppLocalizations.of(context)!.orderStatusCancelled,
           color: AppColor.warningColor,
           icon: Icons.cancel_outlined,
         );
@@ -882,7 +883,7 @@ class OrderTrackingDialog extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.w600),
             ),
             SizedBox(height: 20),
-            _buildTrackingStepper(order.status),
+            _buildTrackingStepper(context, order.status),
             SizedBox(height: 20),
             if (order.estimatedDelivery != null)
               Container(
@@ -908,10 +909,10 @@ class OrderTrackingDialog extends StatelessWidget {
     );
   }
 
-  Widget _buildTrackingStepper(OrderStatus currentStatus) {
+  Widget _buildTrackingStepper(BuildContext context, OrderStatus currentStatus) {
     final steps = [
       _TrackingStep('Order Placed', OrderStatus.preparing, Icons.shopping_bag_outlined),
-      _TrackingStep('Preparing', OrderStatus.preparing, Icons.schedule_outlined),
+      _TrackingStep(AppLocalizations.of(context)!.orderStatusPreparing, OrderStatus.preparing, Icons.schedule_outlined),
       _TrackingStep('On the Way', OrderStatus.onTheWay, Icons.local_shipping_outlined),
       _TrackingStep('Delivered', OrderStatus.delivered, Icons.check_circle_outlined),
     ];

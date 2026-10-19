@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:naseej/core/functions/checkinternet.dart';
 import 'package:naseej/core/constant/app_colors.dart';
+import 'package:naseej/l10n/app_localizations.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
 /// Widget that shows internet connection status and triggers refresh
@@ -185,8 +186,8 @@ class _InternetCheckerWidgetState extends State<InternetCheckerWidget> {
                       Expanded(
                         child: Text(
                           _isOnline
-                              ? 'Connection restored - refreshing content...'
-                              : 'No internet connection',
+                              ? AppLocalizations.of(context)!.connectionRestored
+                              : AppLocalizations.of(context)!.noInternetConnectionSmall,
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w500,
@@ -198,7 +199,7 @@ class _InternetCheckerWidgetState extends State<InternetCheckerWidget> {
                         TextButton(
                           onPressed: _retryConnection,
                           child: Text(
-                            'Retry',
+                            AppLocalizations.of(context)!.retry,
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,

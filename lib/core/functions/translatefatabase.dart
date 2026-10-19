@@ -1,10 +1,8 @@
-import 'package:naseej/core/services/services.dart';
-import 'package:get/get.dart';
+import 'package:naseej/main.dart';
+import 'package:naseej/utils/language_manager.dart';
 
-translateDatabase(columnar, columnen) {
-  MyServices myServices = Get.find();
-
-  if (myServices.sharedPreferences.getString("lang") == "ar") {
+dynamic translateDatabase(dynamic columnar, dynamic columnen) {
+  if (LanguageManager.isArabic() || sharedPref.getString("lang") == "ar") {
     return columnar;
   } else {
     return columnen;

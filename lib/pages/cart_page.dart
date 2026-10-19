@@ -3,6 +3,7 @@ import 'package:naseej/core/constant/app_colors.dart';
 import 'package:naseej/models/cart_item.dart';
 import 'package:naseej/core/services/cart_service.dart';
 import 'package:naseej/pages/explore_page.dart';
+import 'package:naseej/l10n/app_localizations.dart';
 import 'checkout_page.dart';
 import 'main_container.dart';
 
@@ -65,7 +66,7 @@ class _CartPageState extends State<CartPage> {
         setState(() {
           isLoading = false;
         });
-        _showErrorSnackBar(result['message'] ?? 'Failed to load cart');
+        _showErrorSnackBar(result['message'] ?? AppLocalizations.of(context)!.failedToLoadCart);
       }
     }
   }
@@ -92,7 +93,7 @@ class _CartPageState extends State<CartPage> {
       // Reload cart to get updated data
       await _loadCart();
     } else if (mounted) {
-      _showErrorSnackBar(result['message'] ?? 'Failed to update quantity');
+      _showErrorSnackBar(result['message'] ?? AppLocalizations.of(context)!.failedToUpdateQuantity);
     }
 
     if (mounted) {
@@ -116,13 +117,13 @@ class _CartPageState extends State<CartPage> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Item removed from cart'),
+          content: Text(AppLocalizations.of(context)!.itemRemovedFromCart),
           backgroundColor: AppColor.successColor,
           behavior: SnackBarBehavior.floating,
         ),
       );
     } else if (mounted) {
-      _showErrorSnackBar(result['message'] ?? 'Failed to remove item');
+      _showErrorSnackBar(result['message'] ?? AppLocalizations.of(context)!.failedToRemoveItem);
     }
   }
 
@@ -140,13 +141,13 @@ class _CartPageState extends State<CartPage> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Cart cleared successfully'),
+          content: Text(AppLocalizations.of(context)!.cartClearedSuccessfully),
           backgroundColor: AppColor.successColor,
           behavior: SnackBarBehavior.floating,
         ),
       );
     } else if (mounted) {
-      _showErrorSnackBar(result['message'] ?? 'Failed to clear cart');
+      _showErrorSnackBar(result['message'] ?? AppLocalizations.of(context)!.failedToClearCart);
     }
   }
 
@@ -162,7 +163,7 @@ class _CartPageState extends State<CartPage> {
 
   void _navigateToCheckout() {
     if (cartItems.isEmpty) {
-      _showErrorSnackBar('Your cart is empty');
+      _showErrorSnackBar(AppLocalizations.of(context)!.yourCartIsEmpty);
       return;
     }
 
@@ -182,12 +183,12 @@ class _CartPageState extends State<CartPage> {
       builder: (context) => AlertDialog(
         backgroundColor: AppColor.cardBackground,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Text('Clear Cart?', style: TextStyle(color: AppColor.primaryColor)),
-        content: Text('Remove all items from your cart?'),
+        title: Text(AppLocalizations.of(context)!.clearCart, style: TextStyle(color: AppColor.primaryColor)),
+        content: Text(AppLocalizations.of(context)!.removeAllItems),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Cancel', style: TextStyle(color: AppColor.grey)),
+            child: Text(AppLocalizations.of(context)!.cancel, style: TextStyle(color: AppColor.grey)),
           ),
           ElevatedButton(
             onPressed: () {
@@ -197,7 +198,7 @@ class _CartPageState extends State<CartPage> {
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColor.warningColor,
             ),
-            child: Text('Clear All'),
+            child: Text(AppLocalizations.of(context)!.clearAll),
           ),
         ],
       ),
@@ -220,7 +221,7 @@ class _CartPageState extends State<CartPage> {
     return Scaffold(
       backgroundColor: isDark ? Color(0xFF1A1614) : AppColor.backgroundcolor,
       appBar: AppBar(
-        title: Text('Shopping Cart'),
+        title: Text(AppLocalizations.of(context)!.shoppingCart),
         backgroundColor: AppColor.primaryColor,
         foregroundColor: Colors.white,
         actions: [
@@ -246,7 +247,7 @@ class _CartPageState extends State<CartPage> {
         children: [
           CircularProgressIndicator(color: AppColor.primaryColor),
           SizedBox(height: 16),
-          Text('Loading your cart...'),
+          Text(AppLocalizations.of(context)!.loadingYourCart),
         ],
       ),
     );
@@ -273,7 +274,7 @@ class _CartPageState extends State<CartPage> {
             ),
             SizedBox(height: 24),
             Text(
-              'Your Cart is Empty',
+              AppLocalizations.of(context)!.yourCartIsEmpty,
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -282,7 +283,7 @@ class _CartPageState extends State<CartPage> {
             ),
             SizedBox(height: 12),
             Text(
-              'Add beautiful carpets to get started',
+              AppLocalizations.of(context)!.addBeautifulCarpets,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16,
@@ -293,7 +294,7 @@ class _CartPageState extends State<CartPage> {
             ElevatedButton.icon(
               onPressed: _navigateToExplore,
               icon: Icon(Icons.shopping_bag),
-              label: Text('Start Shopping'),
+              label: Text(AppLocalizations.of(context)!.startShopping),
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
               ),
@@ -341,10 +342,10 @@ class _CartPageState extends State<CartPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    _buildSummaryRow('Subtotal', cartSummary!.subtotal),
+                    _buildSummaryRow(AppLocalizations.of(context)!.subtotal, cartSummary!.subtotal),
                     if (cartSummary!.shipping > 0)
-                      _buildSummaryRow('Shipping', cartSummary!.shipping),
-                    _buildSummaryRow('Tax', cartSummary!.tax),
+                      _buildSummaryRow(AppLocalizations.of(context)!.shipping, cartSummary!.shipping),
+                    _buildSummaryRow(AppLocalizations.of(context)!.tax, cartSummary!.tax),
 
                     Divider(height: 16, thickness: 1),
 
@@ -353,7 +354,7 @@ class _CartPageState extends State<CartPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Total',
+                          AppLocalizations.of(context)!.total,
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -389,11 +390,15 @@ class _CartPageState extends State<CartPage> {
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.arrow_forward, size: 20),
+                            Icon(
+                              Directionality.of(context) == TextDirection.rtl
+                                  ? Icons.arrow_back
+                                  : Icons.arrow_forward,
+                              size: 20),
                             SizedBox(width: 8),
                             Flexible(
                               child: Text(
-                                'Continue to Checkout',
+                                ' ${AppLocalizations.of(context)!.continueToCheckout}',
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
@@ -411,7 +416,7 @@ class _CartPageState extends State<CartPage> {
                     if (cartSummary!.shipping > 0) ...[
                       SizedBox(height: 8),
                       Text(
-                        'Add \$${cartSummary!.amountForFreeShipping.toStringAsFixed(2)} more for free shipping!',
+                        AppLocalizations.of(context)!.addMoreForFreeShipping(cartSummary!.amountForFreeShipping.toStringAsFixed(2)),
                         style: TextStyle(
                           fontSize: 11,
                           color: AppColor.goldAccent,
@@ -422,7 +427,7 @@ class _CartPageState extends State<CartPage> {
                     ] else if (cartSummary!.subtotal >= cartSummary!.freeShippingThreshold) ...[
                       SizedBox(height: 8),
                       Text(
-                        'You got free shipping!',
+                        AppLocalizations.of(context)!.youGotFreeShipping,
                         style: TextStyle(
                           fontSize: 14,
                           color: AppColor.goldAccent,
@@ -571,7 +576,7 @@ class _CartPageState extends State<CartPage> {
                     Padding(
                       padding: EdgeInsets.only(top: 4),
                       child: Text(
-                        'Not available',
+                        AppLocalizations.of(context)!.notAvailable,
                         style: TextStyle(
                           fontSize: 11,
                           color: AppColor.warningColor,

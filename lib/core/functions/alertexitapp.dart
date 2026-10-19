@@ -1,10 +1,14 @@
-import 'dart:io';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/services.dart';
 import 'package:naseej/core/constant/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:naseej/utils/app_navigator.dart';
 
 /// Show exit confirmation dialog with app theme styling
 Future<bool> alertExitApp(BuildContext context) async {
+  // On web, there's no concept of "exit app" — just ignore
+  if (kIsWeb) return Future.value(false);
+
   final isDark = Theme.of(context).brightness == Brightness.dark;
 
   bool? shouldExit = await showDialog<bool>(
@@ -162,57 +166,18 @@ Future<bool> alertExitApp(BuildContext context) async {
   );
 
   if (shouldExit == true) {
-    exit(0);
+    SystemNavigator.pop();
   }
 
   return Future.value(false);
 }
 
-/// Show exit confirmation dialog using GetX (Alternative method)
+/// Show exit confirmation dialog (Alternative method using AppNavigator context)
 Future<bool> alertExitAppGetX() {
-  return Get.defaultDialog<bool>(
-    title: "Exit App",
-    titleStyle: TextStyle(
-      color: AppColor.primaryColor,
-      fontWeight: FontWeight.bold,
-      fontSize: 20,
-    ),
-    middleText: "Are you sure you want to exit?",
-    backgroundColor: AppColor.cardBackground,
-    radius: 20,
-    actions: [
-      OutlinedButton(
-        onPressed: () {
-          Get.back(result: false);
-        },
-        style: OutlinedButton.styleFrom(
-          side: BorderSide(color: AppColor.primaryColor),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-        child: Text(
-          "Cancel",
-          style: TextStyle(color: AppColor.primaryColor),
-        ),
-      ),
-      ElevatedButton(
-        onPressed: () {
-          Get.back(result: true);
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColor.primaryColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-        child: Text("Exit"),
-      ),
-    ],
-  ).then((value) {
-    if (value == true) {
-      exit(0);
-    }
-    return Future.value(false);
-  });
+  if (kIsWeb) return Future.value(false);
+  final ctx = AppNavigator.context;
+  if (ctx != null) {
+    return alertExitApp(ctx);
+  }
+  return Future.value(false);
 }

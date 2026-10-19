@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:naseej/core/constant/app_colors.dart';
+import 'package:naseej/l10n/app_localizations.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({Key? key}) : super(key: key);
@@ -13,7 +14,7 @@ class AboutPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: isDark ? Color(0xFF1A1614) : AppColor.backgroundcolor,
       appBar: AppBar(
-        title: Text('About Our Family Business'),
+        title: Text(AppLocalizations.of(context)!.aboutOurFamilyBusiness),
         backgroundColor: AppColor.primaryColor,
         foregroundColor: Colors.white,
       ),
@@ -41,14 +42,10 @@ class AboutPage extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  Icon(
-                    Icons.workspace_premium,
-                    size: 60,
-                    color: Colors.white,
-                  ),
+                  Icon(Icons.workspace_premium, size: 60, color: Colors.white),
                   SizedBox(height: 16),
                   Text(
-                    'Naseej Handmade Carpets',
+                    AppLocalizations.of(context)!.naseejHandmadeCarpets,
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
@@ -58,7 +55,7 @@ class AboutPage extends StatelessWidget {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    'Egyptian Heritage Since 1990',
+                    AppLocalizations.of(context)!.egyptianHeritageSince1990,
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.white.withOpacity(0.9),
@@ -72,7 +69,7 @@ class AboutPage extends StatelessWidget {
 
             // Meet Our Team Section
             Text(
-              'Meet Our Team',
+              AppLocalizations.of(context)!.meetOurTeam,
               style: TextStyle(
                 fontSize: 26,
                 fontWeight: FontWeight.bold,
@@ -81,12 +78,9 @@ class AboutPage extends StatelessWidget {
             ),
             SizedBox(height: 20),
             Text(
-              'Three generations of expertise in Egyptian handmade carpets',
+              AppLocalizations.of(context)!.threeGenerationsExpertise,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 18,
-                color: AppColor.grey,
-              ),
+              style: TextStyle(fontSize: 18, color: AppColor.grey),
             ),
             SizedBox(height: 32),
 
@@ -95,20 +89,20 @@ class AboutPage extends StatelessWidget {
               context: context,
               imagePath: "assets/images/father2.png",
               name: "Ashraf Gaber",
-              role: "Owner & Manager",
-              experience: "30+ Years Experience",
-              description: "Master craftsman with over three decades of experience in authentic Egyptian handmade carpets. Known for exceptional craftsmanship and business excellence.",
+              role: AppLocalizations.of(context)!.ownerAndManager,
+              experience: AppLocalizations.of(context)!.thirtyPlusYearsExperience,
+              description: AppLocalizations.of(context)!.ashrafDescription,
               isDark: isDark,
               contacts: [
                 _TeamContact(
                   type: ContactType.whatsapp,
                   url: 'https://wa.me/201016508371',
-                  tooltip: 'Contact via WhatsApp',
+                  tooltip: AppLocalizations.of(context)!.contactViaWhatsApp,
                 ),
                 _TeamContact(
                   type: ContactType.phone,
                   url: 'tel:+201016508371',
-                  tooltip: 'Call directly',
+                  tooltip: AppLocalizations.of(context)!.callDirectly,
                 ),
               ],
             ),
@@ -118,20 +112,20 @@ class AboutPage extends StatelessWidget {
               context: context,
               imagePath: "assets/images/amr.jpg",
               name: "Amr Gaber",
-              role: "Co-Founder & Senior Designer",
-              experience: "Graphic & UI/UX Designer",
-              description: "Creative director and senior designer specializing in visual identity, brand design, and user experience design for modern businesses.",
+              role: AppLocalizations.of(context)!.coFounderSeniorDesigner,
+              experience: AppLocalizations.of(context)!.graphicUiUxDesigner,
+              description: AppLocalizations.of(context)!.amrDescription,
               isDark: isDark,
               contacts: [
                 _TeamContact(
                   type: ContactType.whatsapp,
                   url: 'https://wa.me/+966540075427',
-                  tooltip: 'Contact via WhatsApp',
+                  tooltip: AppLocalizations.of(context)!.contactViaWhatsApp,
                 ),
                 _TeamContact(
                   type: ContactType.portfolio,
-                  url: 'https://yasser-ashraf-production-ready-mobile-apps.vercel.app/',
-                  tooltip: 'View portfolio',
+                  url: 'https://www.linkedin.com/in/amr-gaber-921b4592/',
+                  tooltip: AppLocalizations.of(context)!.viewPortfolio,
                 ),
               ],
             ),
@@ -141,20 +135,21 @@ class AboutPage extends StatelessWidget {
               context: context,
               imagePath: "assets/images/profile.jpg",
               name: "Eng. Yasser Ashraf",
-              role: "Mobile App Developer",
-              experience: "Flutter & Dart Expert",
-              description: "Specialized in building production-ready mobile applications with modern technology stacks. Bringing traditional craftsmanship to digital platforms.",
+              role: AppLocalizations.of(context)!.mobileAppDeveloper,
+              experience: AppLocalizations.of(context)!.flutterDartExpert,
+              description: AppLocalizations.of(context)!.yasserDescription,
               isDark: isDark,
               contacts: [
                 _TeamContact(
                   type: ContactType.whatsapp,
                   url: 'https://wa.me/201003640081',
-                  tooltip: 'Contact via WhatsApp',
+                  tooltip: AppLocalizations.of(context)!.contactViaWhatsApp,
                 ),
                 _TeamContact(
                   type: ContactType.website,
-                  url: 'https://yasser-ashraf-production-ready-mobile-apps.vercel.app/',
-                  tooltip: 'View Portfolio',
+                  url:
+                      'https://yasser-ashraf-production-ready-mobile-apps.vercel.app/',
+                  tooltip: AppLocalizations.of(context)!.viewPortfolio,
                 ),
               ],
             ),
@@ -195,7 +190,7 @@ class AboutPage extends StatelessWidget {
                       SizedBox(width: 16),
                       Expanded(
                         child: Text(
-                          'Family Pride & Legacy',
+                          AppLocalizations.of(context)!.familyPrideAndLegacy,
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -206,12 +201,21 @@ class AboutPage extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: 20),
-                  _buildCraftItem('Three Generations of Craftsmanship', Icons.history_edu),
-                  _buildCraftItem('Traditional Egyptian Weaving', Icons.flag),
-                  _buildCraftItem('100% Natural Materials', Icons.eco),
-                  _buildCraftItem('Custom Designs & Sizes', Icons.design_services),
-                  _buildCraftItem('Quality Guaranteed', Icons.verified_user),
-                  _buildCraftItem('Tradition with Technology', Icons.phone_iphone),
+                  _buildCraftItem(
+                    AppLocalizations.of(context)!.threeGenerationsCraftsmanship,
+                    Icons.history_edu,
+                  ),
+                  _buildCraftItem(AppLocalizations.of(context)!.traditionalEgyptianWeaving, Icons.flag),
+                  _buildCraftItem(AppLocalizations.of(context)!.naturalMaterials, Icons.eco),
+                  _buildCraftItem(
+                    AppLocalizations.of(context)!.customDesignsAndSizes,
+                    Icons.design_services,
+                  ),
+                  _buildCraftItem(AppLocalizations.of(context)!.qualityGuaranteed, Icons.verified_user),
+                  _buildCraftItem(
+                    AppLocalizations.of(context)!.traditionWithTechnology,
+                    Icons.phone_iphone,
+                  ),
                 ],
               ),
             ),
@@ -231,14 +235,10 @@ class AboutPage extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  Icon(
-                    Icons.auto_awesome,
-                    size: 50,
-                    color: Colors.white,
-                  ),
+                  Icon(Icons.auto_awesome, size: 50, color: Colors.white),
                   SizedBox(height: 16),
                   Text(
-                    'A Family Legacy',
+                    AppLocalizations.of(context)!.aFamilyLegacy,
                     style: TextStyle(
                       fontSize: 26,
                       fontWeight: FontWeight.bold,
@@ -248,7 +248,7 @@ class AboutPage extends StatelessWidget {
                   ),
                   SizedBox(height: 12),
                   Text(
-                    'Proudly continuing our family tradition of excellence in Egyptian handmade carpets, now enhanced with modern technology to serve customers worldwide. Our commitment to quality and authenticity remains unchanged through generations.',
+                    AppLocalizations.of(context)!.familyLegacyDescription,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 15,
@@ -264,7 +264,7 @@ class AboutPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(25),
                     ),
                     child: Text(
-                      'The Gaber Family',
+                      AppLocalizations.of(context)!.theGaberFamily,
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
@@ -307,7 +307,9 @@ class AboutPage extends StatelessWidget {
           ),
         ],
         border: Border.all(
-          color: isDark ? AppColor.earthBrown.withOpacity(0.3) : AppColor.borderGray,
+          color: isDark
+              ? AppColor.earthBrown.withOpacity(0.3)
+              : AppColor.borderGray,
           width: 1.5,
         ),
       ),
@@ -335,10 +337,7 @@ class AboutPage extends StatelessWidget {
                 height: 110,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(
-                    color: AppColor.goldAccent,
-                    width: 3,
-                  ),
+                  border: Border.all(color: AppColor.goldAccent, width: 3),
                 ),
                 child: ClipOval(
                   child: Image.asset(
@@ -410,11 +409,7 @@ class AboutPage extends StatelessWidget {
           Text(
             description,
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 14,
-              color: AppColor.grey,
-              height: 1.4,
-            ),
+            style: TextStyle(fontSize: 14, color: AppColor.grey, height: 1.4),
           ),
           SizedBox(height: 20),
 
@@ -450,11 +445,7 @@ class AboutPage extends StatelessWidget {
             borderRadius: BorderRadius.circular(25),
             border: Border.all(color: color.withOpacity(0.3), width: 2),
           ),
-          child: Icon(
-            iconData,
-            size: 22,
-            color: color,
-          ),
+          child: Icon(iconData, size: 22, color: color),
         ),
       ),
     );
@@ -477,11 +468,7 @@ class AboutPage extends StatelessWidget {
           Expanded(
             child: Text(
               text,
-              style: TextStyle(
-                fontSize: 14,
-                height: 1.4,
-                color: AppColor.grey,
-              ),
+              style: TextStyle(fontSize: 14, height: 1.4, color: AppColor.grey),
             ),
           ),
         ],
@@ -532,25 +519,14 @@ class AboutPage extends StatelessWidget {
 }
 
 // Enums and Data Classes
-enum ContactType {
-  whatsapp,
-  phone,
-  email,
-  linkedin,
-  portfolio,
-  website,
-}
+enum ContactType { whatsapp, phone, email, linkedin, portfolio, website }
 
 class _TeamContact {
   final ContactType type;
   final String url;
   final String tooltip;
 
-  _TeamContact({
-    required this.type,
-    required this.url,
-    required this.tooltip,
-  });
+  _TeamContact({required this.type, required this.url, required this.tooltip});
 }
 
 

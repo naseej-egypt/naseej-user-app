@@ -6,7 +6,7 @@ import 'package:naseej/component/crud.dart';
 import 'package:naseej/auth/otp_verification_page.dart';
 import '../core/functions/checkinternet.dart';
 import '../core/middleware/internet_middleware.dart';
-
+import 'package:naseej/l10n/app_localizations.dart';
 class EmailVerificationNotification extends StatefulWidget {
   final String email;
 
@@ -49,12 +49,12 @@ class _EmailVerificationNotificationState
     if (response["status"] == "success") {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Verification code resent successfully!'),
+          content: Text(AppLocalizations.of(context)!.verificationCodeResentSuccessfully),
           backgroundColor: AppColor.successColor,
         ),
       );
     } else {
-      String errorMessage = response["message"] ?? "Failed to resend code";
+      String errorMessage = response["message"] ?? AppLocalizations.of(context)!.failedToResendCode;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: AppColor.backgroundcolor2,
@@ -79,7 +79,7 @@ class _EmailVerificationNotificationState
             children: [
               // Back button
               Align(
-                alignment: Alignment.centerLeft,
+                alignment: AlignmentDirectional.centerStart,
                 child: IconButton(
                   icon: Icon(Icons.arrow_back, color: AppColor.primaryColor),
                   onPressed: () => Navigator.pop(context),
@@ -107,7 +107,7 @@ class _EmailVerificationNotificationState
 
               // Title
               Text(
-                "Verification Email Sent",
+                AppLocalizations.of(context)!.verificationEmailSent,
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -120,7 +120,7 @@ class _EmailVerificationNotificationState
 
               // Description
               Text(
-                "We've sent a verification code to your email address. Please check your inbox and enter the code to verify your account.",
+                AppLocalizations.of(context)!.verificationEmailDescription,
                 style: TextStyle(
                   fontSize: 16,
                   color: AppColor.grey,
@@ -172,19 +172,19 @@ class _EmailVerificationNotificationState
                   children: [
                     _buildInstruction(
                       icon: Icons.check_circle_outline,
-                      text: "Check your inbox for the verification code",
+                      text: AppLocalizations.of(context)!.checkInboxInstruction,
                       color: AppColor.successColor,
                     ),
                     SizedBox(height: 12),
                     _buildInstruction(
                       icon: Icons.schedule_outlined,
-                      text: "Code expires in 30 minutes",
+                      text: AppLocalizations.of(context)!.codeExpiresIn30Min,
                       color: AppColor.goldAccent,
                     ),
                     SizedBox(height: 12),
                     _buildInstruction(
                       icon: Icons.warning_amber_outlined,
-                      text: "Don't forget to check your spam folder",
+                      text: AppLocalizations.of(context)!.checkSpamFolder,
                       color: AppColor.warningColor,
                     ),
                   ],
@@ -195,7 +195,7 @@ class _EmailVerificationNotificationState
 
               // Continue Button
               Button(
-                title: "Enter Verification Code",
+                title: AppLocalizations.of(context)!.enterVerificationCode,
                 onpressed: () {
                   Navigator.pushReplacement(
                     context,
@@ -224,7 +224,7 @@ class _EmailVerificationNotificationState
                   ),
                 )
                     : Text(
-                  "Didn't receive the code? Resend",
+                  AppLocalizations.of(context)!.didntReceiveCodeResend,
                   style: TextStyle(
                     color: AppColor.primaryColor,
                     fontSize: 14,

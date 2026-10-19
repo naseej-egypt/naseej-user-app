@@ -6,8 +6,9 @@ import 'package:naseej/pages/main_container.dart';
 import 'package:naseej/utils/favorites_manager.dart';
 import 'package:naseej/main.dart';
 
-import '../component/product_card.dart';
-import '../core/services/cart_service.dart';
+import 'package:naseej/component/product_card.dart';
+import 'package:naseej/core/services/cart_service.dart';
+import 'package:naseej/l10n/app_localizations.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   final String productId;
@@ -252,7 +253,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
               ),
             ),
             SizedBox(width: 12),
-            Text(newState ? 'Adding to favorites...' : 'Removing from favorites...'),
+            Text(newState ? AppLocalizations.of(context)!.addingToFavorites : AppLocalizations.of(context)!.removingFromFavorites),
           ],
         ),
         duration: Duration(seconds: 1),
@@ -279,7 +280,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
                     size: 20,
                   ),
                   SizedBox(width: 12),
-                  Text(newState ? 'Added to favorites!' : 'Removed from favorites!'),
+                  Text(newState ? AppLocalizations.of(context)!.addedToFavorites : AppLocalizations.of(context)!.removedFromFavorites),
                 ],
               ),
               duration: Duration(seconds: 2),
@@ -304,7 +305,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
                 children: [
                   Icon(Icons.error_outline, color: Colors.white, size: 20),
                   SizedBox(width: 12),
-                  Text('Failed to update favorites. Please try again.'),
+                  Text(AppLocalizations.of(context)!.failedToUpdateFavorite),
                 ],
               ),
               backgroundColor: AppColor.warningColor,
@@ -331,7 +332,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
               children: [
                 Icon(Icons.error_outline, color: Colors.white, size: 20),
                 SizedBox(width: 12),
-                Text('An error occurred. Please try again.'),
+                Text(AppLocalizations.of(context)!.failedToUpdateFavorite),
               ],
             ),
             backgroundColor: AppColor.warningColor,
@@ -375,14 +376,14 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
               children: [
                 Icon(Icons.check_circle, color: Colors.white),
                 SizedBox(width: 12),
-                Expanded(child: Text('Added to cart successfully!')),
+                Expanded(child: Text(AppLocalizations.of(context)!.addedToCart)),
               ],
             ),
             backgroundColor: AppColor.successColor,
-            duration: Duration(seconds: 2),
+            duration: Duration(seconds: 3),
             behavior: SnackBarBehavior.floating,
             action: SnackBarAction(
-              label: 'View Cart',
+              label: AppLocalizations.of(context)!.viewCart,
               textColor: Colors.white,
               onPressed: () {
                 Navigator.of(context).pushAndRemoveUntil(
@@ -398,7 +399,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(response['message'] ?? "Failed to add to cart"),
+            content: Text(response['message'] ?? AppLocalizations.of(context)!.failedToAddToCart),
             backgroundColor: AppColor.warningColor,
           ),
         );
@@ -406,7 +407,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Error adding to cart: ${e.toString()}"),
+          content: Text("${AppLocalizations.of(context)!.failedToAddToCart}: ${e.toString()}"),
           backgroundColor: AppColor.warningColor,
         ),
       );
@@ -773,7 +774,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
     color: AppColor.successColor, size: 16),
     SizedBox(width: 4),
     Text(
-    'Free Shipping',
+    AppLocalizations.of(context)!.freeShippingTitle,
     style: TextStyle(
     color: AppColor.successColor,
     fontSize: 12,
@@ -792,8 +793,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
     SizedBox(width: 6),
     Text(
     _getStock() > 0
-    ? 'In Stock (${_getStock()} available)'
-        : 'Out of Stock',
+    ? '${AppLocalizations.of(context)!.inStock} (${_getStock()} ${AppLocalizations.of(context)!.available})'
+        : AppLocalizations.of(context)!.outOfStock,
     style: TextStyle(
     fontSize: 14,
     color: _getStock() > 0
@@ -809,7 +810,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
     ),
 
     // Size Selection
-    _buildSectionTitle('Select Size', Icons.straighten),
+    _buildSectionTitle(AppLocalizations.of(context)!.selectSize, Icons.straighten),
     Container(
     height: 60,
     child: ListView.builder(
@@ -827,7 +828,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
     });
     },
     child: Container(
-    margin: EdgeInsets.only(right: 12),
+    margin: EdgeInsetsDirectional.only(end: 12),
     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
     decoration: BoxDecoration(
     gradient: isSelected
@@ -865,7 +866,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
     SizedBox(height: 24),
 
     // Color Selection - ✅ UPDATED TO USE DATABASE COLORS
-    _buildSectionTitle('Select Color', Icons.palette),
+    _buildSectionTitle(AppLocalizations.of(context)!.selectColor, Icons.palette),
     Container(
     height: 80,
     child: ListView.builder(
@@ -883,7 +884,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
     });
     },
     child: Container(
-    margin: EdgeInsets.only(right: 16),
+    margin: EdgeInsetsDirectional.only(end: 16),
     child: Column(
     children: [
     Container(
@@ -940,7 +941,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
     Text(
-    'Quantity',
+    AppLocalizations.of(context)!.quantity,
     style: TextStyle(
     fontSize: 18,
     fontWeight: FontWeight.bold,
@@ -996,7 +997,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
     SizedBox(height: 24),
 
     // Description
-    _buildSectionTitle('Description', Icons.description),
+    _buildSectionTitle(AppLocalizations.of(context)!.description, Icons.description),
     Padding(
     padding: EdgeInsets.symmetric(horizontal: 24),
     child: Text(
@@ -1029,7 +1030,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
     SizedBox(height: 24),
 
     if (relatedProducts.isNotEmpty) ...[
-    _buildSectionTitle('Related Products', Icons.grid_view),
+    _buildSectionTitle(AppLocalizations.of(context)!.relatedProducts, Icons.grid_view),
     Container(
     height: 240,
     margin: EdgeInsets.only(bottom: 20),
@@ -1193,7 +1194,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Total Price',
+                      AppLocalizations.of(context)!.total,
                       style: TextStyle(fontSize: 12, color: AppColor.grey),
                     ),
                     SizedBox(height: 4),
@@ -1242,7 +1243,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
                         Icon(Icons.shopping_cart, size: 22),
                         SizedBox(width: 8),
                         Text(
-                          'Add to Cart',
+                          AppLocalizations.of(context)!.addToCart,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,

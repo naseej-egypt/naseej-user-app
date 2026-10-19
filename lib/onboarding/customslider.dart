@@ -14,20 +14,21 @@ class CustomSliderOnBoarding extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final list = getOnBoardingList(context);
     return PageView.builder(
       controller: pageController,
       onPageChanged: onPageChanged,
-      itemCount: onBoardingList.length,
+      itemCount: list.length,
       itemBuilder: (context, i) => Column(
         children: [
           Image.asset(
-            onBoardingList[i].image!,
+            list[i].image!,
             height: MediaQuery.of(context).size.width / 1.1,
             fit: BoxFit.fill,
           ),
           const SizedBox(height: 60),
           Text(
-            onBoardingList[i].title!,
+            list[i].title!,
             style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 20,
@@ -39,7 +40,7 @@ class CustomSliderOnBoarding extends StatelessWidget {
             width: double.infinity,
             alignment: Alignment.center,
             child: Text(
-              onBoardingList[i].body!,
+              list[i].body!,
               textAlign: TextAlign.center,
               style: const TextStyle(
                 height: 2,

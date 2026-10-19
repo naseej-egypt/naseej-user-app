@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 import 'package:naseej/core/constant/linkapi.dart';
 import 'package:naseej/main.dart';
 import 'package:naseej/core/class/crud.dart';
@@ -76,15 +76,16 @@ class ProfileService {
     }
   }
 
-  /// Upload profile image
-  Future<String?> uploadProfileImage(File imageFile) async {
+  /// Upload profile image using bytes (web-compatible)
+  Future<String?> uploadProfileImage(Uint8List imageBytes, String fileName) async {
     try {
       final headers = _getAuthHeaders();
 
-      var response = await _crud.postRequestWithFile(
+      var response = await _crud.postRequestWithFileBytes(
         AppLink.uploadProfileImage,
         {},
-        imageFile,
+        imageBytes,
+        fileName,
         fileFieldName: "profile_image",
         headers: headers,
       );

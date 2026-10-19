@@ -4,6 +4,7 @@ import 'package:naseej/core/class/crud.dart';
 import 'package:naseej/core/constant/linkapi.dart';
 import 'package:naseej/main.dart';
 import 'package:naseej/pages/orders_page.dart';
+import 'package:naseej/l10n/app_localizations.dart';
 class OrderDetailsPage extends StatefulWidget {
   final String orderId;
 
@@ -87,7 +88,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
     return Scaffold(
       backgroundColor: isDark ? Color(0xFF1A1614) : AppColor.backgroundcolor,
       appBar: AppBar(
-        title: Text('Order Details'),
+        title: Text(AppLocalizations.of(context)!.orderDetails),
         backgroundColor: AppColor.primaryColor,
         foregroundColor: Colors.white,
         leading: IconButton(
@@ -259,7 +260,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                 Icon(Icons.receipt_long, color: AppColor.primaryColor),
                 SizedBox(width: 12),
                 Text(
-                  'Order Summary',
+                  AppLocalizations.of(context)!.orderSummary,
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -305,7 +306,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                 Icon(Icons.local_shipping, color: AppColor.primaryColor),
                 SizedBox(width: 12),
                 Text(
-                  'Delivery Information',
+                  AppLocalizations.of(context)!.shippingDetails ?? 'Delivery Information',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -320,7 +321,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Shipping Address',
+                    AppLocalizations.of(context)!.shippingAddress,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -475,7 +476,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                 Icon(Icons.shopping_bag, color: AppColor.primaryColor),
                 SizedBox(width: 12),
                 Text(
-                  'Order Items (${order.items.length})',
+                  '${AppLocalizations.of(context)!.items} (${order.items.length})',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -591,7 +592,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                 Icon(Icons.payment, color: AppColor.primaryColor),
                 SizedBox(width: 12),
                 Text(
-                  'Payment Summary',
+                  AppLocalizations.of(context)!.paymentDetails ?? 'Payment Summary',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -601,12 +602,12 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
               ],
             ),
             SizedBox(height: 16),
-            _buildSummaryRow('Subtotal', '\$${order.subtotal.toStringAsFixed(2)}', isDark),
-            _buildSummaryRow('Tax', '\$${order.tax.toStringAsFixed(2)}', isDark),
-            _buildSummaryRow('Delivery Fee', '\$${order.deliveryFee.toStringAsFixed(2)}', isDark),
+            _buildSummaryRow(AppLocalizations.of(context)!.subtotal, '\$${order.subtotal.toStringAsFixed(2)}', isDark),
+            _buildSummaryRow(AppLocalizations.of(context)!.tax, '\$${order.tax.toStringAsFixed(2)}', isDark),
+            _buildSummaryRow(AppLocalizations.of(context)!.deliveryFee, '\$${order.deliveryFee.toStringAsFixed(2)}', isDark),
             Divider(height: 20, thickness: 1),
             _buildSummaryRow(
-              'Total',
+              AppLocalizations.of(context)!.total,
               '\$${order.total.toStringAsFixed(2)}',
               isDark,
               isBold: true,
@@ -725,19 +726,19 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
           children: [
             Icon(Icons.cancel_outlined, color: AppColor.warningColor),
             SizedBox(width: 12),
-            Text('Cancel Order', style: TextStyle(color: AppColor.primaryColor)),
+            Text(AppLocalizations.of(context)!.cancelOrder, style: TextStyle(color: AppColor.primaryColor)),
           ],
         ),
-        content: Text('Are you sure you want to cancel this order? This action cannot be undone.'),
+        content: Text(AppLocalizations.of(context)!.cancelOrderConfirm ?? 'Are you sure you want to cancel this order? This action cannot be undone.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: Text('Keep Order', style: TextStyle(color: AppColor.grey)),
+            child: Text(AppLocalizations.of(context)!.keepOrder ?? 'Keep Order', style: TextStyle(color: AppColor.grey)),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(backgroundColor: AppColor.warningColor),
-            child: Text('Cancel Order'),
+            child: Text(AppLocalizations.of(context)!.cancelOrder),
           ),
         ],
       ),
@@ -775,13 +776,13 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
   String _getStatusText(OrderStatus status) {
     switch (status) {
       case OrderStatus.preparing:
-        return 'Preparing';
+        return AppLocalizations.of(context)!.orderStatusPreparing;
       case OrderStatus.onTheWay:
-        return 'On the Way';
+        return AppLocalizations.of(context)!.shipped ?? 'On the Way';
       case OrderStatus.delivered:
-        return 'Delivered';
+        return AppLocalizations.of(context)!.delivered;
       case OrderStatus.cancelled:
-        return 'Cancelled';
+        return AppLocalizations.of(context)!.orderStatusCancelled;
     }
   }
 

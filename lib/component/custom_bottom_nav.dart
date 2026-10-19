@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:naseej/core/constant/app_colors.dart';
+import 'package:naseej/l10n/app_localizations.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
   final int currentIndex;
@@ -53,28 +54,28 @@ class CustomBottomNavBar extends StatelessWidget {
             _buildNavItem(
               icon: Icons.explore_outlined,
               activeIcon: Icons.explore,
-              label: 'Explore',
+              label: AppLocalizations.of(context)!.explore,
               isActive: currentIndex == 0,
             ),
             // Favorites - index 1
             _buildNavItem(
               icon: Icons.favorite_outline,
               activeIcon: Icons.favorite,
-              label: 'Favorites',
+              label: AppLocalizations.of(context)!.favorites,
               isActive: currentIndex == 1,
             ),
             // Home - index 2
             _buildNavItem(
               icon: Icons.home_outlined,
               activeIcon: Icons.home,
-              label: 'Home',
+              label: AppLocalizations.of(context)!.home,
               isActive: currentIndex == 2,
             ),
             // Cart - index 3
             _buildNavItem(
               icon: Icons.shopping_cart_outlined,
               activeIcon: Icons.shopping_cart,
-              label: 'Cart',
+              label: AppLocalizations.of(context)!.cart,
               isActive: currentIndex == 3,
               showBadge: true,
               badgeCount: cartItemCount,
@@ -83,7 +84,7 @@ class CustomBottomNavBar extends StatelessWidget {
             _buildNavItem(
               icon: Icons.receipt_long_outlined,
               activeIcon: Icons.receipt_long,
-              label: 'Orders',
+              label: AppLocalizations.of(context)!.orders,
               isActive: currentIndex == 4,
             ),
           ],

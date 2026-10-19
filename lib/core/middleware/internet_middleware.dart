@@ -1,25 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:naseej/core/functions/checkinternet.dart';
 import 'package:naseej/core/constant/app_colors.dart';
-
-/// Middleware to check internet before navigating to pages
-class InternetMiddleware extends GetMiddleware {
-  @override
-  int? get priority => 1;
-
-  @override
-  RouteSettings? redirect(String? route) {
-    // Check internet connection before navigating
-    return null;
-  }
-
-  @override
-  GetPage? onPageCalled(GetPage? page) {
-    // You can add internet check here if needed
-    return super.onPageCalled(page);
-  }
-}
+import 'package:naseej/l10n/app_localizations.dart';
 
 /// Show no internet dialog
 void showNoInternetDialog(BuildContext context) {
@@ -56,7 +38,7 @@ void showNoInternetDialog(BuildContext context) {
               SizedBox(height: 20),
 
               Text(
-                'No Internet Connection',
+                AppLocalizations.of(context)!.noInternetConnection,
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
@@ -67,7 +49,7 @@ void showNoInternetDialog(BuildContext context) {
               SizedBox(height: 12),
 
               Text(
-                'Please check your internet connection and try again',
+                AppLocalizations.of(context)!.checkInternetAndRetry,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 15,
@@ -93,7 +75,7 @@ void showNoInternetDialog(BuildContext context) {
                         ),
                       ),
                       child: Text(
-                        'Cancel',
+                        AppLocalizations.of(context)!.cancel,
                         style: TextStyle(color: AppColor.grey),
                       ),
                     ),
@@ -115,7 +97,7 @@ void showNoInternetDialog(BuildContext context) {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: Text('Retry'),
+                      child: Text(AppLocalizations.of(context)!.retry),
                     ),
                   ),
                 ],
@@ -150,7 +132,7 @@ void showNoInternetSnackbar(BuildContext context) {
         borderRadius: BorderRadius.circular(12),
       ),
       action: SnackBarAction(
-        label: 'Retry',
+        label: AppLocalizations.of(context)!.retry,
         textColor: Colors.white,
         onPressed: () async {
           bool hasInternet = await checkInternet();
@@ -161,7 +143,7 @@ void showNoInternetSnackbar(BuildContext context) {
                   children: [
                     Icon(Icons.wifi, color: Colors.white),
                     SizedBox(width: 12),
-                    Text('Connected to internet'),
+                    Text(AppLocalizations.of(context)!.connectedToInternet),
                   ],
                 ),
                 backgroundColor: AppColor.successColor,

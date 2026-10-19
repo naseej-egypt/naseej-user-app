@@ -1,5 +1,6 @@
-import 'dart:io';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:http/http.dart' as http;
 
 /// Check internet connection using multiple methods
 class InternetChecker {
@@ -7,25 +8,29 @@ class InternetChecker {
   factory InternetChecker() => _instance;
   InternetChecker._internal();
 
-  /// Check internet connection by DNS lookup
+  /// Check internet connection
+  /// On web: uses HTTP request (dart:io is not available)
+  /// On mobile: uses HTTP request (cross-platform compatible)
   Future<bool> checkInternet() async {
+    if (kIsWeb) {
+      // connectivity_plus often returns false positives (ConnectivityResult.none) on Web.
+      // We return true here and let the HTTP requests fail naturally if offline.
+      return true;
+    }
     try {
-      final result = await InternetAddress.lookup('google.com')
-          .timeout(Duration(seconds: 5));
+      final response = await http.head(
+        Uri.parse('https://www.google.com'),
+      ).timeout(Duration(seconds: 5));
 
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        return true;
-      }
-    } on SocketException catch (_) {
-      return false;
+      return response.statusCode == 200;
     } catch (_) {
       return false;
     }
-    return false;
   }
 
   /// Check internet using connectivity_plus package
   Future<bool> hasConnection() async {
+    if (kIsWeb) return true; // Bypass connectivity_plus bugs on web
     try {
       final connectivityResult = await Connectivity().checkConnectivity();
 

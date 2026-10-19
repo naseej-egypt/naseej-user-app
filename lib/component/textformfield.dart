@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:naseej/core/constant/app_colors.dart';
 
 class CustomTextForm extends StatefulWidget {
   final String hintText;
@@ -34,34 +33,48 @@ class _CustomTextFormState extends State<CustomTextForm> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final isDark = theme.brightness == Brightness.dark;
+
+    // Derive all colors from the active theme
+    final fillColor = theme.inputDecorationTheme.fillColor ??
+        (isDark ? const Color(0xFF2C2520) : const Color(0xFFE8DCC8));
+    final textColor = colorScheme.onSurface;
+    final hintColor = isDark ? const Color(0xFF8A7E6E) : const Color(0xFF999999);
+    final accentColor = colorScheme.primary;
+    final iconColor = isDark ? const Color(0xFFdf9696) : const Color(0xFFdf9696);
+
     return TextFormField(
       controller: widget.controller,
       obscureText: _isObscured,
       keyboardType: widget.keyboardType,
       maxLines: widget.maxLines,
+      style: TextStyle(color: textColor, fontSize: 16),
+      cursorColor: accentColor,
       decoration: InputDecoration(
         hintText: widget.hintText,
-        hintStyle: const TextStyle(color: AppColor.backgroundcolor2, fontSize: 14),
+        hintStyle: TextStyle(color: hintColor, fontSize: 14),
         contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         filled: true,
-        fillColor: AppColor.backgroundcolor2,
+        fillColor: fillColor,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColor.fourthColor, width: 2),
+          borderSide: BorderSide(color: accentColor, width: 2),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColor.warningColor, width: 1),
+          borderSide: const BorderSide(color: Colors.redAccent, width: 1),
         ),
         suffixIcon: widget.isPassword
             ? IconButton(
           icon: Icon(
             _isObscured ? Icons.visibility_off : Icons.visibility,
-            color: AppColor.fourthColor,
+            color: iconColor,
           ),
           onPressed: () {
             setState(() {
@@ -74,3 +87,4 @@ class _CustomTextFormState extends State<CustomTextForm> {
     );
   }
 }
+

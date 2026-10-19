@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:naseej/core/constant/app_colors.dart';
 import 'package:naseej/core/constant/imgaeasset.dart';
+import 'package:naseej/static.dart';
 import 'package:naseej/onboarding/custombutton.dart';
 import 'package:naseej/onboarding/customslider.dart';
 import 'package:naseej/onboarding/dotcontroller.dart';
 import 'package:naseej/main.dart';
+import 'package:naseej/l10n/app_localizations.dart';
 
 class OnBoarding extends StatefulWidget {
   const OnBoarding({Key? key}) : super(key: key);
@@ -20,6 +22,7 @@ class _OnBoardingState extends State<OnBoarding> with SingleTickerProviderStateM
   late Animation<double> _fadeAnimation;
   int currentPage = 0;
   bool isLoading = false;
+  bool _imagesPrecached = false;
 
   @override
   void initState() {
@@ -38,6 +41,21 @@ class _OnBoardingState extends State<OnBoarding> with SingleTickerProviderStateM
         curve: Curves.easeInOut,
       ),
     );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_imagesPrecached) {
+      _imagesPrecached = true;
+      // Precache all onboarding images so they appear immediately
+      final list = getOnBoardingList(context);
+      for (final item in list) {
+        if (item.image != null) {
+          precacheImage(AssetImage(item.image!), context);
+        }
+      }
+    }
   }
 
   @override
@@ -63,7 +81,7 @@ class _OnBoardingState extends State<OnBoarding> with SingleTickerProviderStateM
       await Future.delayed(const Duration(milliseconds: 1500));
 
       if (mounted) {
-        Navigator.of(context).pushReplacementNamed("/login");
+        Navigator.of(context).pushReplacementNamed("/terms-consent");
       }
     } else {
       pageController.animateToPage(
@@ -146,8 +164,8 @@ class _OnBoardingState extends State<OnBoarding> with SingleTickerProviderStateM
                         },
                         child: Column(
                           children: [
-                            const Text(
-                              "Welcome Aboard!",
+                            Text(
+                              AppLocalizations.of(context)!.welcomeAboard,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 24,
@@ -158,8 +176,8 @@ class _OnBoardingState extends State<OnBoarding> with SingleTickerProviderStateM
 
                             const SizedBox(height: 12),
 
-                            const Text(
-                              "Setting up your experience...",
+                            Text(
+                              AppLocalizations.of(context)!.settingUpExperience,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 16,

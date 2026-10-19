@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'dart:io';
+import 'dart:typed_data';
 import 'package:http/http.dart' as http;
-import 'package:path/path.dart';
+import 'package:naseej/utils/session_manager.dart';
 
 class Crud {
   /// POST request with optional headers (for authentication)
@@ -31,7 +31,12 @@ class Crud {
       );
 
       if (response.statusCode == 200) {
-        return jsonDecode(response.body);
+        final decoded = jsonDecode(response.body);
+        if (SessionManager.isSessionExpired(decoded)) {
+          SessionManager.handleSessionExpiry();
+          return {"status": "fail", "message": "Session expired", "_session_expired": true};
+        }
+        return decoded;
       } else {
         return {
           "status": "error",
@@ -47,23 +52,23 @@ class Crud {
     }
   }
 
-  /// POST request with file upload (for images)
-  Future<Map<String, dynamic>> postRequestWithFile(
+  /// POST request with file upload using bytes (web-compatible)
+  /// [fileBytes] - the file data as bytes
+  /// [fileName] - the original filename
+  Future<Map<String, dynamic>> postRequestWithFileBytes(
       String url,
       Map<String, dynamic> data,
-      File file, {
+      Uint8List fileBytes,
+      String fileName, {
         String fileFieldName = "file",
         Map<String, String>? headers,
       }) async {
     try {
       var request = http.MultipartRequest('POST', Uri.parse(url));
 
-      // Add headers if provided - FIXED: Properly handle headers
+      // Add headers if provided
       if (headers != null) {
         request.headers.addAll(headers);
-      } else {
-        // Default headers for file upload
-        request.headers['Content-Type'] = 'multipart/form-data';
       }
 
       // Add form fields
@@ -71,14 +76,11 @@ class Crud {
         request.fields[key] = value.toString();
       });
 
-      // Add file
-      var stream = http.ByteStream(file.openRead());
-      var length = await file.length();
-      var multipartFile = http.MultipartFile(
+      // Add file from bytes (works on both web and mobile)
+      var multipartFile = http.MultipartFile.fromBytes(
         fileFieldName,
-        stream,
-        length,
-        filename: basename(file.path),
+        fileBytes,
+        filename: fileName,
       );
       request.files.add(multipartFile);
 
@@ -91,7 +93,12 @@ class Crud {
       var response = await http.Response.fromStream(streamedResponse);
 
       if (response.statusCode == 200) {
-        return jsonDecode(response.body);
+        final decoded = jsonDecode(response.body);
+        if (SessionManager.isSessionExpired(decoded)) {
+          SessionManager.handleSessionExpiry();
+          return {"status": "fail", "message": "Session expired", "_session_expired": true};
+        }
+        return decoded;
       } else {
         return {
           "status": "error",
@@ -132,7 +139,12 @@ class Crud {
       );
 
       if (response.statusCode == 200) {
-        return jsonDecode(response.body);
+        final decoded = jsonDecode(response.body);
+        if (SessionManager.isSessionExpired(decoded)) {
+          SessionManager.handleSessionExpiry();
+          return {"status": "fail", "message": "Session expired", "_session_expired": true};
+        }
+        return decoded;
       } else {
         return {
           "status": "error",
@@ -171,7 +183,12 @@ class Crud {
       );
 
       if (response.statusCode == 200) {
-        return jsonDecode(response.body);
+        final decoded = jsonDecode(response.body);
+        if (SessionManager.isSessionExpired(decoded)) {
+          SessionManager.handleSessionExpiry();
+          return {"status": "fail", "message": "Session expired", "_session_expired": true};
+        }
+        return decoded;
       } else {
         return {
           "status": "error",
@@ -212,7 +229,12 @@ class Crud {
       );
 
       if (response.statusCode == 200) {
-        return jsonDecode(response.body);
+        final decoded = jsonDecode(response.body);
+        if (SessionManager.isSessionExpired(decoded)) {
+          SessionManager.handleSessionExpiry();
+          return {"status": "fail", "message": "Session expired", "_session_expired": true};
+        }
+        return decoded;
       } else {
         return {
           "status": "error",

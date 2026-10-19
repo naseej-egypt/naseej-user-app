@@ -1,29 +1,39 @@
-import 'package:get/get.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:naseej/core/services/ProfileService.dart';
 
-class DeleteAccountController extends GetxController {
+class DeleteAccountController extends ChangeNotifier {
   final ProfileService _profileService = ProfileService();
 
-  final RxBool isLoading = false.obs;
-  final RxString errorMessage = ''.obs;
+  bool isLoading = false;
+  String errorMessage = '';
 
   Future<bool> deleteAccount() async {
     try {
-      isLoading.value = true;
-      errorMessage.value = '';
+      isLoading = true;
+      errorMessage = '';
+      notifyListeners();
 
       final success = await _profileService.deleteAccount();
 
-      isLoading.value = false;
+      isLoading = false;
+      notifyListeners();
       return success;
     } catch (e) {
-      isLoading.value = false;
-      errorMessage.value = e.toString();
+      isLoading = false;
+      errorMessage = e.toString();
+      notifyListeners();
       return false;
     }
   }
 
   void clearError() {
-    errorMessage.value = '';
+    errorMessage = '';
+    notifyListeners();
   }
 }
+
+final deleteAccountProvider =
+    ChangeNotifierProvider.autoDispose<DeleteAccountController>((ref) {
+  return DeleteAccountController();
+});

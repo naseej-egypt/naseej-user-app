@@ -5,6 +5,7 @@ import 'package:naseej/component/button.dart';
 import 'package:naseej/main.dart';
 import 'package:naseej/core/class/crud.dart';
 import 'package:naseej/core/constant/linkapi.dart';
+import 'package:naseej/l10n/app_localizations.dart';
 
 class AddAddressPage extends StatefulWidget {
   const AddAddressPage({Key? key}) : super(key: key);
@@ -146,7 +147,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
     return Scaffold(
       backgroundColor: isDark ? Color(0xFF1A1614) : AppColor.backgroundcolor,
       appBar: AppBar(
-        title: Text('Add New Address'),
+        title: Text(AppLocalizations.of(context)!.addNewAddress),
         backgroundColor: AppColor.primaryColor,
         foregroundColor: Colors.white,
       ),
@@ -179,7 +180,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
             // Street Address
             _buildTextField(
               controller: streetController,
-              label: 'Street Address *',
+              label: '${AppLocalizations.of(context)!.addressLine1} *',
               hint: 'House number and street name',
               icon: Icons.home_outlined,
               maxLines: 2,
@@ -195,7 +196,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
             // City
             _buildTextField(
               controller: cityController,
-              label: 'City *',
+              label: '${AppLocalizations.of(context)!.cityField} *',
               hint: 'Enter city',
               icon: Icons.location_city,
               validator: (value) {
@@ -214,7 +215,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
                   flex: 2,
                   child: _buildTextField(
                     controller: stateController,
-                    label: 'State/Province *',
+                    label: '${AppLocalizations.of(context)!.stateProvince} *',
                     hint: 'State',
                     icon: Icons.map_outlined,
                     validator: (value) {
@@ -229,7 +230,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
                 Expanded(
                   child: _buildTextField(
                     controller: zipCodeController,
-                    label: 'Zip Code *',
+                    label: '${AppLocalizations.of(context)!.postalCode} *',
                     hint: '12345',
                     icon: Icons.pin_outlined,
                     keyboardType: TextInputType.number,
@@ -252,7 +253,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
 
             // Save Button
             Button(
-              title: 'Save Address',
+              title: AppLocalizations.of(context)!.saveAddress,
               isLoading: isLoading,
               onpressed: _saveAddress,
               icon: Icons.save,
@@ -318,7 +319,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Country *',
+          '${AppLocalizations.of(context)!.country} *',
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w600,

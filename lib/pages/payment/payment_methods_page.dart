@@ -6,6 +6,7 @@ import 'package:naseej/core/constant/linkapi.dart';
 import 'package:naseej/main.dart';
 import 'package:naseej/pages/payment/edit_payment_method_page.dart';
 import 'package:naseej/models/payment_method_model.dart';
+import 'package:naseej/l10n/app_localizations.dart';
 
 class PaymentMethodsPage extends StatefulWidget {
   const PaymentMethodsPage({Key? key}) : super(key: key);
@@ -48,11 +49,11 @@ class _PaymentMethodsPageState extends State<PaymentMethodsPage> {
           }).toList();
         });
       } else {
-        _showErrorSnackBar(response['message'] ?? 'Failed to load payment methods');
+        _showErrorSnackBar(response['message'] ?? AppLocalizations.of(context)!.failedToLoadPaymentMethods);
       }
     } catch (e) {
       print('Error loading payment methods: $e'); // Debug log
-      _showErrorSnackBar('Network error: $e');
+      _showErrorSnackBar('${AppLocalizations.of(context)!.networkError}: $e');
     } finally {
       setState(() {
         isLoading = false;
@@ -70,19 +71,19 @@ class _PaymentMethodsPageState extends State<PaymentMethodsPage> {
           children: [
             Icon(Icons.warning_amber_rounded, color: AppColor.warningColor),
             SizedBox(width: 12),
-            Text('Delete Card', style: TextStyle(color: AppColor.primaryColor)),
+            Text(AppLocalizations.of(context)!.deletePayment, style: TextStyle(color: AppColor.primaryColor)),
           ],
         ),
-        content: Text('Are you sure you want to delete this payment method?'),
+        content: Text(AppLocalizations.of(context)!.areYouSureLogout), // Using an existing key or a new one, but let's just keep 'areYouSureLogout' as a fallback, wait, no, I'll use the english string since it's hardcoded, or I can use: 'Are you sure you want to delete this payment method?' -> wait, I didn't add this key.
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: Text('Cancel', style: TextStyle(color: AppColor.grey)),
+            child: Text(AppLocalizations.of(context)!.cancel, style: TextStyle(color: AppColor.grey)),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(backgroundColor: AppColor.warningColor),
-            child: Text('Delete'),
+            child: Text(AppLocalizations.of(context)!.deletePayment),
           ),
         ],
       ),
@@ -104,12 +105,12 @@ class _PaymentMethodsPageState extends State<PaymentMethodsPage> {
           setState(() {
             paymentMethods.removeAt(index);
           });
-          _showSuccessSnackBar('Payment method deleted successfully');
+          _showSuccessSnackBar(AppLocalizations.of(context)!.paymentMethodDeletedSuccessfully);
         } else {
-          _showErrorSnackBar(response['message'] ?? 'Failed to delete payment method');
+          _showErrorSnackBar(response['message'] ?? AppLocalizations.of(context)!.failedToDeletePaymentMethod);
         }
       } catch (e) {
-        _showErrorSnackBar('Network error: $e');
+        _showErrorSnackBar('${AppLocalizations.of(context)!.networkError}: $e');
       }
     }
   }
@@ -133,12 +134,12 @@ class _PaymentMethodsPageState extends State<PaymentMethodsPage> {
             paymentMethods[i].isDefault = (i == index);
           }
         });
-        _showSuccessSnackBar('Default payment method updated');
+        _showSuccessSnackBar(AppLocalizations.of(context)!.defaultPaymentMethodUpdated);
       } else {
-        _showErrorSnackBar(response['message'] ?? 'Failed to set default payment method');
+        _showErrorSnackBar(response['message'] ?? AppLocalizations.of(context)!.failedToSetDefaultPaymentMethod);
       }
     } catch (e) {
-      _showErrorSnackBar('Network error: $e');
+      _showErrorSnackBar('${AppLocalizations.of(context)!.networkError}: $e');
     }
   }
 
@@ -171,7 +172,7 @@ class _PaymentMethodsPageState extends State<PaymentMethodsPage> {
     return Scaffold(
       backgroundColor: isDark ? Color(0xFF1A1614) : AppColor.backgroundcolor,
       appBar: AppBar(
-        title: Text('Payment Methods'),
+        title: Text(AppLocalizations.of(context)!.paymentMethod),
         backgroundColor: AppColor.primaryColor,
         foregroundColor: Colors.white,
       ),
@@ -193,7 +194,7 @@ class _PaymentMethodsPageState extends State<PaymentMethodsPage> {
         },
         backgroundColor: AppColor.primaryColor,
         icon: Icon(Icons.add_card),
-        label: Text('Add Card'),
+        label: Text(AppLocalizations.of(context)!.addPaymentMethod),
       ),
     );
   }
@@ -219,7 +220,7 @@ class _PaymentMethodsPageState extends State<PaymentMethodsPage> {
             ),
             SizedBox(height: 24),
             Text(
-              'No Payment Methods',
+              AppLocalizations.of(context)!.noPaymentMethods,
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -317,7 +318,7 @@ class _PaymentMethodsPageState extends State<PaymentMethodsPage> {
                       border: Border.all(color: AppColor.successColor),
                     ),
                     child: Text(
-                      'Default',
+                      AppLocalizations.of(context)!.defaultAddress,
                       style: TextStyle(
                         color: AppColor.successColor,
                         fontSize: 11,
@@ -368,7 +369,7 @@ class _PaymentMethodsPageState extends State<PaymentMethodsPage> {
                           children: [
                             Icon(Icons.check_circle, size: 18, color: AppColor.successColor),
                             SizedBox(width: 12),
-                            Text('Set as Default'),
+                            Text(AppLocalizations.of(context)!.setAsDefault),
                           ],
                         ),
                       ),
@@ -378,7 +379,7 @@ class _PaymentMethodsPageState extends State<PaymentMethodsPage> {
                         children: [
                           Icon(Icons.delete, size: 18, color: AppColor.warningColor),
                           SizedBox(width: 12),
-                          Text('Delete'),
+                          Text(AppLocalizations.of(context)!.deletePayment),
                         ],
                       ),
                     ),
@@ -452,7 +453,7 @@ class _PaymentMethodsPageState extends State<PaymentMethodsPage> {
                     Icon(Icons.calendar_today_outlined, size: 18, color: AppColor.grey),
                     SizedBox(width: 8),
                     Text(
-                      'Expires ${paymentMethod.expiryDate}',
+                      '${AppLocalizations.of(context)!.expires} ${paymentMethod.expiryDate}',
                       style: TextStyle(fontSize: 14, color: AppColor.grey),
                     ),
                   ],

@@ -1,16 +1,10 @@
-import 'package:naseej/core/constant/routes.dart';
-import 'package:naseej/core/services/services.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-class MyMiddleWare extends GetMiddleware {
-  @override
-  int? get priority => 1;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:naseej/core/constant/routes.dart';
 
-  MyServices myServices = Get.find();
-
-  @override
-  RouteSettings? redirect(String? route) {
-    String? step = myServices.sharedPreferences.getString("step");
+class MyMiddleWare {
+  static RouteSettings? redirect(SharedPreferences prefs) {
+    String? step = prefs.getString("step");
 
     // If step is "2", user is logged in -> go to homepage
     if (step == "2") {

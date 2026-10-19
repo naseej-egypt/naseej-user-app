@@ -9,6 +9,7 @@ import 'package:naseej/main.dart';
 import 'package:naseej/component/product_card.dart';
 import 'package:naseej/component/internet_checker_widget.dart';
 import 'package:naseej/pages/product_details_page.dart';
+import 'package:naseej/l10n/app_localizations.dart';
 
 class ExplorePage extends StatefulWidget {
   const ExplorePage({Key? key}) : super(key: key);
@@ -187,7 +188,7 @@ class _ExplorePageState extends State<ExplorePage> {
                     flexibleSpace: FlexibleSpaceBar(
                       centerTitle: true,
                       title: Text(
-                        'Explore',
+                        AppLocalizations.of(context)!.explore,
                         style: TextStyle(
                           fontFamily: 'PlayfairDisplay',
                           fontSize: 24,
@@ -227,7 +228,7 @@ class _ExplorePageState extends State<ExplorePage> {
                           controller: _searchController,
                           onChanged: _performSearch,
                           decoration: InputDecoration(
-                            hintText: 'Search carpets...',
+                            hintText: AppLocalizations.of(context)!.searchCarpets,
                             prefixIcon: Icon(Icons.search, color: AppColor.primaryColor),
                             suffixIcon: _searchController.text.isNotEmpty
                                 ? IconButton(
@@ -262,7 +263,7 @@ class _ExplorePageState extends State<ExplorePage> {
                             return GestureDetector(
                               onTap: () => _onCategorySelected(categoryId),
                               child: Container(
-                                margin: EdgeInsets.only(right: 12),
+                                margin: EdgeInsetsDirectional.only(end: 12),
                                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                                 decoration: BoxDecoration(
                                   gradient: isSelected
@@ -320,11 +321,13 @@ class _ExplorePageState extends State<ExplorePage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            _isSearching
-                                ? 'Search Results${_currentSearchQuery.isNotEmpty ? ' for "${_currentSearchQuery}"' : ''}'
-                                : _selectedCategory == 'All'
-                                ? 'All Products'
-                                : '${_getCategoryDisplayName(categories.firstWhere((cat) => cat['category_id'] == _selectedCategory, orElse: () => {'category_name': 'Category'}))}',
+                              _isSearching
+                                  ? _currentSearchQuery.isEmpty
+                                      ? AppLocalizations.of(context)!.searchResults
+                                      : AppLocalizations.of(context)!.searchResultsFor(_currentSearchQuery)
+                                  : _selectedCategory == 'All'
+                                      ? AppLocalizations.of(context)!.allProducts
+                                      : '${_getCategoryDisplayName(categories.firstWhere((cat) => cat['category_id'] == _selectedCategory, orElse: () => {'category_name': 'Category'}))}',
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -357,7 +360,7 @@ class _ExplorePageState extends State<ExplorePage> {
                                     ),
                                     SizedBox(height: 20),
                                     Text(
-                                      _isSearching ? 'Searching...' : 'Loading products...',
+                                      _isSearching ? AppLocalizations.of(context)!.searching : AppLocalizations.of(context)!.loadingProducts,
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600,
@@ -381,7 +384,7 @@ class _ExplorePageState extends State<ExplorePage> {
                                     Icon(Icons.error_outline, size: 64, color: AppColor.warningColor),
                                     SizedBox(height: 16),
                                     Text(
-                                      "Error loading products",
+                                      AppLocalizations.of(context)!.errorLoadingProducts,
                                       style: TextStyle(color: AppColor.warningColor),
                                     ),
                                   ],
@@ -410,8 +413,8 @@ class _ExplorePageState extends State<ExplorePage> {
                                     SizedBox(height: 16),
                                     Text(
                                       _isSearching
-                                          ? 'No products found for "${_currentSearchQuery}"'
-                                          : 'No products found',
+                                          ? AppLocalizations.of(context)!.noProductsFoundFor(_currentSearchQuery)
+                                          : AppLocalizations.of(context)!.noProductsFound,
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
@@ -497,7 +500,7 @@ class _ExplorePageState extends State<ExplorePage> {
                         ),
                         SizedBox(height: 20),
                         Text(
-                          'Refreshing...',
+                          AppLocalizations.of(context)!.refreshing,
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,

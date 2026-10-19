@@ -15,6 +15,7 @@ import 'package:naseej/utils/favorites_manager.dart';
 import 'package:naseej/component/app_drawer.dart';
 import '../component/internet_checker_widget.dart';
 import '../core/constant/imgaeasset.dart';
+import 'package:naseej/l10n/app_localizations.dart';
 
 class MyHomePage extends StatefulWidget {
   final VoidCallback? onCartUpdated;
@@ -86,9 +87,9 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 
   final List<Map<String, dynamic>> _promotions = [
     {
-      'title': 'Special Offer',
-      'subtitle': 'Up to 30% OFF',
-      'description': 'On Traditional Handwoven Carpets',
+      'title': 'specialOffer',
+      'subtitle': 'upTo30Off',
+      'description': 'onTraditionalCarpets',
       'gradient': LinearGradient(
         colors: [AppColor.primaryColor, AppColor.secondColor],
         begin: Alignment.topLeft,
@@ -98,9 +99,9 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       'type': 'offer',
     },
     {
-      'title': 'New Arrival',
-      'subtitle': 'Premium Collection',
-      'description': 'Discover Our Latest Designs',
+      'title': 'newArrival',
+      'subtitle': 'premiumCollection',
+      'description': 'discoverLatestDesigns',
       'gradient': LinearGradient(
         colors: [AppColor.goldAccent, AppColor.earthBrown],
         begin: Alignment.topLeft,
@@ -110,9 +111,9 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       'type': 'new_arrivals',
     },
     {
-      'title': 'Free Shipping',
-      'subtitle': 'Orders Over \$300',
-      'description': 'Limited Time Offer',
+      'title': 'freeShipping',
+      'subtitle': 'ordersOver300',
+      'description': 'limitedTimeOffer',
       'gradient': LinearGradient(
         colors: [AppColor.earthBrown, AppColor.bronzeAccent],
         begin: Alignment.topLeft,
@@ -176,7 +177,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
             {
               'category_id': 'All',
               'category_name': 'All Products',
-              'short_name': 'All',
+              'short_name': 'all',
             },
             ...response["data"]
           ];
@@ -255,13 +256,33 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   }
 
   String _getCategoryDisplayName(dynamic category) {
-    return category['short_name'] ?? category['category_name'] ?? 'Category';
+    final shortName = category['short_name'] ?? category['category_name'] ?? 'Category';
+    if (shortName == 'all') {
+      final l10n = AppLocalizations.of(context);
+      return l10n?.all ?? 'All';
+    }
+    return shortName;
+  }
+
+  String _localizeKey(AppLocalizations l10n, String key) {
+    final map = {
+      'specialOffer': l10n.specialOffer,
+      'upTo30Off': l10n.upTo30Off,
+      'onTraditionalCarpets': l10n.onTraditionalCarpets,
+      'newArrival': l10n.newArrival,
+      'premiumCollection': l10n.premiumCollection,
+      'discoverLatestDesigns': l10n.discoverLatestDesigns,
+      'freeShipping': l10n.freeShipping,
+      'ordersOver300': l10n.ordersOver300,
+      'limitedTimeOffer': l10n.limitedTimeOffer,
+    };
+    return map[key] ?? key;
   }
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-
+    final l10n = AppLocalizations.of(context)!;
     return InternetCheckerWidget(
       showOnlineMessage: true,
       onConnectionRestored: _handleRefresh,
@@ -291,7 +312,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                     flexibleSpace: FlexibleSpaceBar(
                       centerTitle: true,
                       title: Text(
-                        'Naseej',
+                        l10n.appName,
                         style: TextStyle(
                           fontFamily: 'PlayfairDisplay',
                           fontSize: 24,
@@ -325,7 +346,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Handcrafted Egyptian Carpets',
+                              AppLocalizations.of(context)!.handcraftedEgyptianCarpets,
                               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                                 color: isDark ? AppColor.goldAccent : AppColor.primaryColor,
                                 fontWeight: FontWeight.bold,
@@ -333,7 +354,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                             ),
                             SizedBox(height: 8),
                             Text(
-                              'Discover timeless elegance woven with tradition',
+                              AppLocalizations.of(context)!.discoverTimelessElegance,
                               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                 color: AppColor.grey,
                               ),
@@ -357,10 +378,11 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                         },
                         itemBuilder: (context, index) {
                           final promotion = _promotions[index];
+                          final l10n = AppLocalizations.of(context)!;
                           return _buildPromotionCard(
-                            title: promotion['title'],
-                            subtitle: promotion['subtitle'],
-                            description: promotion['description'],
+                            title: _localizeKey(l10n, promotion['title']),
+                            subtitle: _localizeKey(l10n, promotion['subtitle']),
+                            description: _localizeKey(l10n, promotion['description']),
                             gradient: promotion['gradient'],
                             icon: promotion['icon'],
                             type: promotion['type'],
@@ -383,7 +405,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                               Icon(Icons.auto_awesome, color: AppColor.goldAccent, size: 24),
                               SizedBox(width: 8),
                               Text(
-                                'Recommended for You', // Static title
+                              AppLocalizations.of(context)!.recommendedForYou, // Static title
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -401,7 +423,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                               );
                             },
                             child: Text(
-                              'See All',
+                              AppLocalizations.of(context)!.seeAll,
                               style: TextStyle(
                                 color: isDark ? AppColor.goldAccent : AppColor.primaryColor,
                                 fontWeight: FontWeight.w600,
@@ -437,7 +459,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                 });
                               },
                               child: Container(
-                                margin: EdgeInsets.only(right: 12),
+                                margin: EdgeInsetsDirectional.only(end: 12),
                                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                                 decoration: BoxDecoration(
                                   gradient: isSelected
@@ -509,7 +531,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                     ),
                                     SizedBox(height: 20),
                                     Text(
-                                      'Loading products...',
+                                      AppLocalizations.of(context)!.loadingProducts,
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600,
@@ -636,7 +658,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                         ),
                         SizedBox(height: 20),
                         Text(
-                          'Refreshing...',
+                          AppLocalizations.of(context)!.refreshing,
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -676,7 +698,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
             SizedBox(height: 24),
             Text(
               _selectedCategory == 'All'
-                  ? 'No products available'
+                  ? AppLocalizations.of(context)!.noProductsAvailable
                   : 'No products found in ${_getCategoryDisplayName(categories.firstWhere((cat) => cat['category_id'] == _selectedCategory, orElse: () => {'category_name': 'this category'}))}',
               style: TextStyle(
                 fontSize: 18,
@@ -695,7 +717,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                   });
                 },
                 child: Text(
-                  'View All Products',
+                  AppLocalizations.of(context)!.viewAllProducts,
                   style: TextStyle(
                     color: AppColor.primaryColor,
                     fontWeight: FontWeight.w600,
@@ -798,7 +820,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            'Shop Now',
+                            AppLocalizations.of(context)!.shopNow,
                             style: TextStyle(
                               color: AppColor.primaryColor,
                               fontSize: 13,
@@ -806,7 +828,11 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                             ),
                           ),
                           SizedBox(width: 6),
-                          Icon(Icons.arrow_forward, size: 16, color: AppColor.primaryColor),
+                          Icon(
+                            Directionality.of(context) == TextDirection.rtl
+                                ? Icons.arrow_back
+                                : Icons.arrow_forward,
+                            size: 16, color: AppColor.primaryColor),
                         ],
                       ),
                     ),
